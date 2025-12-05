@@ -3,15 +3,15 @@ package com.misstilo.cloth_erp_api.mapper.base;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 
-import com.misstilo.cloth_erp_api.model.base.StoreTypeModel;
-import com.misstilo.cloth_erp_api.model.base.StoreTypeQueryModel;
+import com.misstilo.cloth_erp_api.model.base.ReturnReasonModel;
+import com.misstilo.cloth_erp_api.model.base.ReturnReasonQueryModel;
 
-public class StoreTypeProvider {
-    public String insert(StoreTypeModel model) {
+public class ReturnReasonProvider {
+    public String insert(ReturnReasonModel model) {
         return new SQL() {
             {
-                INSERT_INTO("StoreType");
-                VALUES("Name", "#{name}");
+                INSERT_INTO("ReturnReason");
+                VALUES("Reason", "#{reason}");
             }
         }.toString();
     }
@@ -22,22 +22,23 @@ public class StoreTypeProvider {
                 if (id == null) {
                     throw new RuntimeException("Delete ID should not be null.");
                 }
-                DELETE_FROM("StoreType");
+                DELETE_FROM("ReturnReason");
                 WHERE("Id = #{id}");
             }
         }.toString();
     }
 
-    public String update(StoreTypeModel model) {
+    public String update(ReturnReasonModel model) {
         return new SQL() {
             {
                 if (model.getId() == null) {
                     throw new RuntimeException("Update ID should not be null.");
                 }
                 Boolean updateFlag = false;
-                UPDATE("StoreType");
-                if (StringUtils.isNotBlank(model.getName())) {
-                    SET("Name = #{name}");
+
+                UPDATE("ReturnReason");
+                if (StringUtils.isNotBlank(model.getReason())) {
+                    SET("Reason = #{reason}");
                     updateFlag = true;
                 }
                 if (!updateFlag) {
@@ -48,15 +49,14 @@ public class StoreTypeProvider {
         }.toString();
     }
 
-    public String select(StoreTypeQueryModel model) {
+    public String select(ReturnReasonQueryModel model) {
         return new SQL() {
             {
                 SELECT("*");
-                FROM("StoreType");
-                if (StringUtils.isNotBlank(model.getName())) {
-                    WHERE("Name LIKE '%' + #{name} + '%'");
+                FROM("ReturnReason");
+                if (StringUtils.isNotBlank(model.getReason())) {
+                    WHERE("Reason LIKE #{reason} + '%'");
                 }
-                ORDER_BY("Id");
             }
         }.toString();
     }

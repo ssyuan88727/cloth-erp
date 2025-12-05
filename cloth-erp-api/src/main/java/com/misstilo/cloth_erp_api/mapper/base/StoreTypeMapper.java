@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
@@ -22,6 +24,10 @@ public interface StoreTypeMapper {
     @UpdateProvider(type = StoreTypeProvider.class, method = "update")
     Integer update(StoreTypeModel model);
 
+    @Results(id = "StoreTypeResultMap", value = {
+            @Result(column = "Id", property = "id", javaType = Integer.class, id = true),
+            @Result(column = "Name", property = "name", javaType = String.class)
+    })
     @SelectProvider(type = StoreTypeProvider.class, method = "select")
     List<StoreTypeModel> select(StoreTypeQueryModel model);
 }

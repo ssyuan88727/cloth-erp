@@ -1,4 +1,4 @@
-package com.misstilo.cloth_erp_api.controller.base;
+package com.misstilo.cloth_erp_api.controller.product;
 
 import java.util.List;
 
@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.base.StoreTypeModel;
-import com.misstilo.cloth_erp_api.model.base.StoreTypeQueryModel;
+import com.misstilo.cloth_erp_api.model.product.TagModel;
+import com.misstilo.cloth_erp_api.model.product.TagQueryModel;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
-import com.misstilo.cloth_erp_api.service.base.StoreTypeService;
+import com.misstilo.cloth_erp_api.service.product.TagService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @RestController
-@RequestMapping("/store-type")
+@RequestMapping("/tag")
 @Builder
-public class StoreTypeController {
+public class TagController {
     @Autowired
-    private final StoreTypeService service;
+    private final TagService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid StoreTypeModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid TagModel model) {
         return ResponseModel.success(service.insert(model));
     }
 
@@ -39,12 +39,12 @@ public class StoreTypeController {
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid StoreTypeModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid TagModel model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<StoreTypeModel>> select(@Valid StoreTypeQueryModel model) {
+    public ResponseModel<List<TagModel>> select(@Valid TagQueryModel model) {
         return ResponseModel.success(service.select(model));
     }
 }

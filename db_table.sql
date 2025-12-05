@@ -6,9 +6,10 @@ CREATE TABLE
     Supplier (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code NVARCHAR (10) NOT NULL UNIQUE, -- 例如: S005
-        Name NVARCHAR (100) NOT NULL, -- 供應商名稱
-        ContactName NVARCHAR (50), -- 聯絡人姓名
-        ContactPhone NVARCHAR (20), -- 聯絡電話
+        Name NVARCHAR (20) NOT NULL, -- 供應商名稱
+        ContactName NVARCHAR (20), -- 聯絡人姓名
+        ContactPhone VARCHAR (20), -- 聯絡電話
+        Address NVARCHAR(255), -- 地址
         IsActive BIT DEFAULT 1, -- 是否啟用
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),
         UpdateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME ()
@@ -26,35 +27,34 @@ CREATE TABLE
     Store (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code NVARCHAR (10) NOT NULL UNIQUE, -- 例如: S001
-        Name NVARCHAR (100) NOT NULL, -- 門市/倉庫名稱
+        Name NVARCHAR (20) NOT NULL, -- 門市/倉庫名稱
         StoreTypeId INT NOT NULL FOREIGN KEY REFERENCES StoreType (Id), -- 門市/倉庫類型
         IsActive BIT DEFAULT 1, -- 是否啟用
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),
         UpdateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME ()
     );
 
--- Tag (標籤字典表 - 支援高效 M:N 關係)
-CREATE TABLE
-    Tag (
-        Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Name NVARCHAR (50) NOT NULL UNIQUE, -- 例如: 休閒, 棉麻, 夏季
-    );
-
 -- ReturnReason (退回理由字典表 - 支援銷售與採購退回)
 CREATE TABLE
     ReturnReason (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Reason NVARCHAR (100) NOT NULL -- 例如：尺碼不合, 商品瑕疵
+        Reason NVARCHAR (10) NOT NULL -- 例如：尺碼不合, 商品瑕疵
     );
 
 -- #######################################################################
 -- # II. 商品與庫存模組 (Product & Inventory)
 -- #######################################################################
+-- Tag (標籤字典表 - 支援高效 M:N 關係)
+CREATE TABLE
+    Tag (
+        Id INT IDENTITY (1, 1) PRIMARY KEY,
+        Name NVARCHAR (10) NOT NULL UNIQUE, -- 例如: 休閒, 棉麻, 夏季
+    );
 -- Category (商品分類)
 CREATE TABLE
     Category (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Name NVARCHAR (50) NOT NULL -- 例如: 上衣, 褲子
+        Name NVARCHAR (20) NOT NULL -- 例如: 上衣, 褲子
     );
 
 -- Color (顏色屬性字典表)
@@ -62,7 +62,7 @@ CREATE TABLE
     Color (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code NVARCHAR (10) NOT NULL UNIQUE, -- 例如: RED
-        Name NVARCHAR (50) NOT NULL -- 例如: 紅色
+        Name NVARCHAR (20) NOT NULL -- 例如: 紅色
     );
 
 -- Size (尺寸屬性字典表)
@@ -70,17 +70,17 @@ CREATE TABLE
     Size (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code NVARCHAR (10) NOT NULL UNIQUE, -- 例如: M
-        Name NVARCHAR (50) NOT NULL -- 例如: 中號
+        Name NVARCHAR (20) NOT NULL -- 例如: 中號
     );
 
 -- Product (商品主檔)
 CREATE TABLE
     Product (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Code NVARCHAR (20) NOT NULL UNIQUE, -- 例如: P00101
-        Name NVARCHAR (100) NOT NULL, -- 商品名稱
+        Code VARCHAR (20) NOT NULL UNIQUE, -- 例如: P00101
+        Name NVARCHAR (20) NOT NULL, -- 商品名稱
         CategoryId INT NOT NULL FOREIGN KEY REFERENCES Category (Id), -- 商品分類
-        Remark NVARCHAR (200), -- 商品描述
+        Remark NVARCHAR (255), -- 商品描述
         SellPrc DECIMAL(18, 2) NOT NULL, -- 建議售價
         IsActive BIT DEFAULT 1, -- 是否啟用
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),

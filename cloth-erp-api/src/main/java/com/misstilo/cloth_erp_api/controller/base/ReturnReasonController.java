@@ -12,39 +12,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.base.StoreTypeModel;
-import com.misstilo.cloth_erp_api.model.base.StoreTypeQueryModel;
+import com.misstilo.cloth_erp_api.model.base.ReturnReasonModel;
+import com.misstilo.cloth_erp_api.model.base.ReturnReasonQueryModel;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
-import com.misstilo.cloth_erp_api.service.base.StoreTypeService;
+import com.misstilo.cloth_erp_api.service.base.ReturnReasonService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @RestController
-@RequestMapping("/store-type")
+@RequestMapping("/return-reason")
 @Builder
-public class StoreTypeController {
+public class ReturnReasonController {
     @Autowired
-    private final StoreTypeService service;
+    private final ReturnReasonService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid StoreTypeModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid ReturnReasonModel model) {
         return ResponseModel.success(service.insert(model));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     public ResponseModel<Integer> delete(@PathVariable @NotNull Integer id) {
         return ResponseModel.success(service.delete(id));
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid StoreTypeModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid ReturnReasonModel model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<StoreTypeModel>> select(@Valid StoreTypeQueryModel model) {
+    public ResponseModel<List<ReturnReasonModel>> select(@Valid ReturnReasonQueryModel model) {
         return ResponseModel.success(service.select(model));
     }
 }

@@ -1,16 +1,16 @@
-package com.misstilo.cloth_erp_api.mapper.base;
+package com.misstilo.cloth_erp_api.mapper.product;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 
-import com.misstilo.cloth_erp_api.model.base.StoreTypeModel;
-import com.misstilo.cloth_erp_api.model.base.StoreTypeQueryModel;
+import com.misstilo.cloth_erp_api.model.product.TagModel;
+import com.misstilo.cloth_erp_api.model.product.TagQueryModel;
 
-public class StoreTypeProvider {
-    public String insert(StoreTypeModel model) {
+public class TagProvider {
+    public String insert(TagModel model) {
         return new SQL() {
             {
-                INSERT_INTO("StoreType");
+                INSERT_INTO("Tag");
                 VALUES("Name", "#{name}");
             }
         }.toString();
@@ -22,20 +22,20 @@ public class StoreTypeProvider {
                 if (id == null) {
                     throw new RuntimeException("Delete ID should not be null.");
                 }
-                DELETE_FROM("StoreType");
+                DELETE_FROM("Tag");
                 WHERE("Id = #{id}");
             }
         }.toString();
     }
 
-    public String update(StoreTypeModel model) {
+    public String update(TagModel model) {
         return new SQL() {
             {
                 if (model.getId() == null) {
                     throw new RuntimeException("Update ID should not be null.");
                 }
                 Boolean updateFlag = false;
-                UPDATE("StoreType");
+
                 if (StringUtils.isNotBlank(model.getName())) {
                     SET("Name = #{name}");
                     updateFlag = true;
@@ -48,15 +48,14 @@ public class StoreTypeProvider {
         }.toString();
     }
 
-    public String select(StoreTypeQueryModel model) {
+    public String select(TagQueryModel model) {
         return new SQL() {
             {
                 SELECT("*");
-                FROM("StoreType");
+                FROM("Tag");
                 if (StringUtils.isNotBlank(model.getName())) {
-                    WHERE("Name LIKE '%' + #{name} + '%'");
+                    WHERE("Name LIKE #{name} + '%'");
                 }
-                ORDER_BY("Id");
             }
         }.toString();
     }
