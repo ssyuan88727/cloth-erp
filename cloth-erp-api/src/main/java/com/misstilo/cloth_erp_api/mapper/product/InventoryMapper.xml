@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.product.InventoryMapper">
+  <!-- Result Map for Inventory -->
+  <resultMap id="inventoryResultMap" type="com.misstilo.cloth_erp_api.model.product.InventoryModel">
+    <id column="Id" property="id" />
+    <result column="StoreId" property="storeId" />
+    <result column="StoreName" property="storeName" />
+    <result column="ProductSkuId" property="productSkuId" />
+    <result column="ProductName" property="productName" />
+    <result column="CurrentQty" property="currentQty" />
+    <result column="PurchaseQty" property="purchaseQty" />
+    <result column="PurchaseReturnQty" property="purchaseReturnQty" />
+    <result column="SaleQty" property="saleQty" />
+    <result column="SaleReturnQty" property="saleReturnQty" />
+    <result column="ActualQty" property="actualQty" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO Inventory (StoreId, ProductSkuId, CurrentQty, PurchaseQty, PurchaseReturnQty, SaleQty, SaleReturnQty)
+    VALUES (#{storeId}, #{productSkuId}, #{currentQty}, #{purchaseQty}, #{purchaseReturnQty}, #{saleQty}, #{saleReturnQty})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM Inventory
+    WHERE id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE Inventory
+    <if test="currentQty != null">
+      <set>
+        CurrentQty = #{currentQty}
+      </set>
+    </if>
+    <if test="purchaseQty != null">
+      <set>
+        PurchaseQty = #{purchaseQty}
+      </set>
+    </if>
+    <if test="purchaseReturnQty != null">
+      <set>
+        PurchaseReturnQty = #{purchaseReturnQty}
+      </set>
+    </if>
+    <if test="saleQty != null">
+      <set>
+        SaleQty = #{saleQty}
+      </set>
+    </if>
+    <if test="saleReturnQty != null">
+      <set>
+        SaleReturnQty = #{saleReturnQty}
+      </set>
+    </if>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="inventoryResultMap">
+    SELECT I.*, S.Name AS StoreName, P.Name AS ProductName
+    FROM Inventory AS I
+    INNER JOIN Store AS S ON I.StoreId = S.Id
+    INNER JOIN ProductSku AS PS ON I.ProductSkuId = PS.Id
+    INNER JOIN Product AS P ON PS.ProductId = P.Id
+    <where>
+      <if test="id != null">
+        AND I.Id = #{id}
+      </if>
+      <if test="storeId != null">
+        AND I.StoreId IN
+        <foreach collection="storeId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="productSkuId != null">
+        AND I.ProductSkuId IN
+        <foreach collection="productSkuId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="currentQtyS != null">
+        AND I.CurrentQty &gt;= #{currentQtyS}
+      </if>
+      <if test="currentQtyE != null">
+        AND I.CurrentQty &lt;= #{currentQtyE}
+      </if>
+      <if test="purchaseQtyS != null">
+        AND I.PurchaseQty &gt;= #{purchaseQtyS}
+      </if>
+      <if test="purchaseQtyE != null">
+        AND I.PurchaseQty &lt;= #{purchaseQtyE}
+      </if>
+      <if test="purchaseReturnQtyS != null">
+        AND I.PurchaseReturnQty &gt;= #{purchaseReturnQtyS}
+      </if>
+      <if test="purchaseReturnQtyE != null">
+        AND I.PurchaseReturnQty &lt;= #{purchaseReturnQtyE}
+      </if>
+      <if test="saleQtyS != null">
+        AND I.SaleQty &gt;= #{saleQtyS}
+      </if>
+      <if test="saleQtyE != null">
+        AND I.SaleQty &lt;= #{saleQtyE}
+      </if>
+      <if test="saleReturnQtyS != null">
+        AND I.SaleReturnQty &gt;= #{saleReturnQtyS}
+      </if>
+      <if test="saleReturnQtyE != null">
+        AND I.SaleReturnQty &lt;= #{saleReturnQtyE}
+      </if>
+      <if test="actualQtyS != null">
+        AND I.ActualQty &gt;= #{actualQtyS}
+      </if>
+      <if test="actualQtyE != null">
+        AND I.ActualQty &lt;= #{actualQtyE}
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

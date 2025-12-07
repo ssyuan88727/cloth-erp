@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.base.ReturnReasonMapper">
+  <!-- Result Map for ReturnReason -->
+  <resultMap id="ReturnReasonResultMap" type="com.misstilo.cloth_erp_api.model.base.ReturnReasonModel">
+    <id column="Id" property="id" />
+    <result column="Reason" property="reason" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO ReturnReason (Reason)
+    VALUES (#{reason})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM ReturnReason
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE ReturnReason
+    <if test="reason != null and reason != ''">
+      <set>
+        Reason = #{reason}
+      </set>
+    </if>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="ReturnReasonResultMap">
+    SELECT *
+    FROM ReturnReason
+    <where>
+      <if test="id != null">
+        AND Id = #{id}
+      </if>
+      <if test="reason != null and reason != ''">
+        AND Reason LIKE '%' + #{reason} + '%'
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

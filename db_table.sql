@@ -50,12 +50,6 @@ CREATE TABLE
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Name NVARCHAR (10) NOT NULL UNIQUE, -- 例如: 休閒, 棉麻, 夏季
     );
--- Category (商品分類)
-CREATE TABLE
-    Category (
-        Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Name NVARCHAR (20) NOT NULL -- 例如: 上衣, 褲子
-    );
 
 -- Color (顏色屬性字典表)
 CREATE TABLE
@@ -79,17 +73,16 @@ CREATE TABLE
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code VARCHAR (20) NOT NULL UNIQUE, -- 例如: P00101
         Name NVARCHAR (20) NOT NULL, -- 商品名稱
-        CategoryId INT NOT NULL FOREIGN KEY REFERENCES Category (Id), -- 商品分類
         Remark NVARCHAR (255), -- 商品描述
-        SellPrc DECIMAL(18, 2) NOT NULL, -- 建議售價
+        UnitPrc DECIMAL(18, 2) NOT NULL, -- 建議售價
         IsActive BIT DEFAULT 1, -- 是否啟用
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),
         UpdateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME ()
     );
 
--- ProductTagMapping (商品-標籤關聯表)
+-- ProductTagRel (商品-標籤關聯表)
 CREATE TABLE
-    ProductTagMapping (
+    ProductTagRel (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         ProductId INT NOT NULL FOREIGN KEY REFERENCES Product (Id), -- 商品ID
         TagId INT NOT NULL FOREIGN KEY REFERENCES Tag (Id), -- 標籤ID
@@ -122,9 +115,7 @@ CREATE TABLE
         SaleQty INT NOT NULL DEFAULT 0, -- 訂單訂購數量
         SaleReturnQty INT NOT NULL DEFAULT 0, -- 訂單退貨數量
         ActualQty AS (
-            CurrentQty - (
-                PurchaseQty + PurchaseReturnQty - OrderQty + OrderReturnQty
-            )
+            CurrentQty - PurchaseQty - PurchaseReturnQty - SaleQty - SaleReturnQty
         ), -- 當前實際庫存數量
         CONSTRAINT UQ_Inventory_Sku_Store UNIQUE (StoreId, ProductSkuId)
     );

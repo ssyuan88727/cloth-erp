@@ -10,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TagQueryModel {
-    private Integer id;
-    @Size(max = 10, message = "名稱最多10個字")
-    private String name;
+public class SizeQueryModel {
+  private Integer id;
+  @Size(max = 10, message = "代號不可超過10字")
+  private String code;
+  @Size(max = 20, message = "名稱不可超過20字")
+  private String name;
 }

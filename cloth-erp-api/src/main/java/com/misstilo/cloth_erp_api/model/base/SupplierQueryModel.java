@@ -1,15 +1,22 @@
 package com.misstilo.cloth_erp_api.model.base;
 
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SupplierQueryModel {
+    private Integer id;
     @Size(max = 10, message = "代號不可超過10字")
     private String code;
     @Size(max = 20, message = "名稱不可超過20字")
     private String name;
-    @Size(max = 20, message = "聯絡人名稱不可超過50字")
+    @Size(max = 20, message = "聯絡人名稱不可超過20字")
     private String contactName;
     @Size(max = 20, message = "聯絡人電話不可超過20字")
     private String contactPhone;

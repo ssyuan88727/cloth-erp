@@ -2,9 +2,15 @@ package com.misstilo.cloth_erp_api.model.base;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StoreTypeModel {
     private Integer id;
     @NotBlank(message = "名稱不可為空")
