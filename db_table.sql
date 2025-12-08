@@ -191,7 +191,6 @@ CREATE TABLE
         Code NVARCHAR (20) NOT NULL UNIQUE,
         Date DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (), -- 退回日期
         SupplierId INT NOT NULL FOREIGN KEY REFERENCES Supplier (Id), -- 供應商ID
-        ReasonId INT NOT NULL FOREIGN KEY REFERENCES ReturnReason (Id), -- 退回理由
         TotQty INT NOT NULL DEFAULT 0, -- 退回數量
         TotAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 退回總金額
         Remark NVARCHAR (255),
@@ -205,40 +204,29 @@ CREATE TABLE
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         PurchaseReturnId INT NOT NULL FOREIGN KEY REFERENCES PurchaseReturn (Id), -- 採購退回ID
         ProductSkuId INT NOT NULL FOREIGN KEY REFERENCES ProductSku (Id), -- 退回 Sku ID
+        ReturnReasonId INT NOT NULL FOREIGN KEY REFERENCES ReturnReason (Id), -- 退回理由 ID
         Qty INT NOT NULL DEFAULT 1, -- 退回數量
         CostPrc DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 單位成本
         SubTot AS (Qty * CostPrc), -- 小計
-        ReasonId INT NOT NULL FOREIGN KEY REFERENCES ReturnReason (Id), -- 退回理由
-        CONSTRAINT UQ_PurchaseReturnDetail UNIQUE (PurchaseReturnId, ProductSkuId)
+        CONSTRAINT UQ_PurchaseReturnDetail UNIQUE (PurchaseReturnId, ProductSkuId, ReturnReasonId)
     );
 
 -- #######################################################################
 -- # IV. 會員與 CRM 模組 (CRM)
 -- #######################################################################
--- MemberLevel (會員等級字典檔)
-CREATE TABLE
-    MemberLevel (
-        Id INT PRIMARY KEY, -- 1=銅卡, 2=銀卡, 3=金卡
-        Code VARCHAR(20) NOT NULL UNIQUE,
-        Name NVARCHAR (20) NOT NULL, -- 會員等級名稱
-        DiscRate DECIMAL(5, 4) NOT NULL DEFAULT 0, -- 折扣比例
-        UpgradeAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 升級門檻金額
-        ExpireDay INT NOT NULL DEFAULT 0 -- 有效天數
-    );
-
 -- Member (會員主檔)
 CREATE TABLE
     Member (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code NVARCHAR (20) NOT NULL UNIQUE, -- 會員編號, 例如: M0001
         Name NVARCHAR (50) NOT NULL, -- 會員姓名
-        MemberLevelId INT NOT NULL DEFAULT 0 FOREIGN KEY REFERENCES MemberLevel (Id), -- 會員等級
         Phone NVARCHAR (20), -- 聯絡電話
         Email NVARCHAR (100), -- 電子郵件
         Address NVARCHAR (255), -- 聯絡地址
         JoinDate DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (), -- 加入日期
-        TotAmt DECIMAL(18, 2) DEFAULT 0, -- 12個月累積金額
-        TotCnt INT DEFAULT 0, -- 12個月累積次數
+        TotQty INT DEFAULT 0, -- 累積件數
+        TotAmt DECIMAL(18, 2) DEFAULT 0, -- 1累積金額
+        TotCnt INT DEFAULT 0, -- 累積次數
         IsActive BIT DEFAULT 1, -- 是否啟用
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),
         UpdateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME ()
@@ -251,14 +239,14 @@ CREATE TABLE
 CREATE TABLE
     SalesPlatform (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
-        Name NVARCHAR (50) NOT NULL UNIQUE -- 例如: Shopee, MOMO
+        Name NVARCHAR (10) NOT NULL UNIQUE -- 例如: Shopee, MOMO
     );
 
 -- PaymentMethod (付款方式字典表)
 CREATE TABLE
     PaymentMethod (
         Id INT IDENTITY (1, 1) PRIMARY KEY, -- 付款方式ID
-        Name NVARCHAR (50) NOT NULL UNIQUE -- 例如: 信用卡, 貨到付款
+        Name NVARCHAR (10) NOT NULL UNIQUE -- 例如: 信用卡, 貨到付款
     );
 
 -- SalesOrder (銷售訂單主表) - 線上/Shopee/MOMO
@@ -268,7 +256,7 @@ CREATE TABLE
         Code VARCHAR(20) NOT NULL UNIQUE, -- 訂單號
         Date DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (), -- 訂單日期
         MemberId INT FOREIGN KEY REFERENCES Member (Id), -- 會員ID
-        StoreId INT FOREIGN KEY REFERENCES Store (Id), -- 銷售/出貨地點
+        StoreId INT NOT NULL FOREIGN KEY REFERENCES Store (Id), -- 銷售/出貨地點
         SalesPlatformId INT NOT NULL DEFAULT 0 FOREIGN KEY REFERENCES SalesPlatform (Id), -- 銷售平台, 0=線下, 1=Shopee, 2=MOMO
         TotAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 訂單總金額
         DiscAmt DECIMAL(18, 2) NOT NUll DEFAULT 0, -- 折扣金額
@@ -291,7 +279,7 @@ CREATE TABLE
         Qty INT NOT NULL DEFAULT 1, -- 銷售數量
         SellPrc DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 銷售單價
         DiscPrc DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 折扣金額
-        SubTot AS (SellPrc * Qty - DiscAmt) PERSISTED, -- 小計金額
+        SubTot AS ((SellPrc - DiscPrc) * Qty) PERSISTED, -- 小計金額
         CONSTRAINT UQ_SalesOrderDetail UNIQUE (SalesOrderId, ProductSkuId)
     );
 

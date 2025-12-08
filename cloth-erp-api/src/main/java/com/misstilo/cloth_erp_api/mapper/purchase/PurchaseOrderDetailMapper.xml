@@ -6,8 +6,7 @@
     <id column="Id" property="id" />
     <result column="PurchaseOrderId" property="purchaseOrderId" />
     <result column="ProductSkuId" property="productSkuId" />
-    <result column="ProductSku" property="productSku" />
-    <result column="ProductSkuName" property="productSkuName" />
+    <result column="ProductSkuCode" property="productSkuCode" />
     <result column="PurchaseQty" property="purchaseQty" />
     <result column="ReceivedQty" property="receivedQty" />
     <result column="UndeliveredQty" property="undeliveredQty" />
@@ -44,7 +43,7 @@
   </update>
   <!-- Select -->
   <select id="select" resultMap="purchaseOrderDetailResultMap">
-    SELECT POD.*, PS.Name AS ProductSkuName, PS.SkuCode AS ProductSku
+    SELECT POD.*, PS.SkuCode AS ProductSkuCode
     FROM PurchaseOrderDetail AS POD
     INNER JOIN ProductSku AS PS ON POD.ProductSkuId = PS.Id
     <where>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.member.MemberMapper">
+  <!-- Result Map for Member -->
+  <resultMap id="memberResultMap" type="com.misstilo.cloth_erp_api.model.member.MemberModel">
+    <id column="Id" property="id" />
+    <result column="Code" property="code" />
+    <result column="Name" property="name" />
+    <result column="Phone" property="phone" />
+    <result column="Email" property="email" />
+    <result column="address" property="address" />
+    <result column="joinDate" property="joinDate" />
+    <result column="TotQty" property="totQty" />
+    <result column="TotAmt" property="totAmt" />
+    <result column="TotCnt" property="totCnt" />
+    <result column="IsActive" property="isActive" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO Member (Code, Name, Phone, Email, Address, JoinDate, IsActive)
+    VALUES (#{code}, #{name}, #{phone}, #{email}, #{address}, #{joinDate}, #{isActive})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM Member
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE Member
+    <if test="code != null and code != ''">
+      <set>
+        Code = #{code}
+      </set>
+    </if>
+    <if test="name != null and name != ''">
+      <set>
+        Name = #{name}
+      </set>
+    </if>
+    <if test="email != null and email != ''">
+      <set>
+        Email = #{email}
+      </set>
+    </if>
+    <if test="address != null and address != ''">
+      <set>
+        Address = #{address}
+      </set>
+    </if>
+    <if test="joinDate != null and joinDate != ''">
+      <set>
+        JoinDate = #{joinDate}
+      </set>
+    </if>
+    <if test="isActive != null and isActive != ''">
+      <set>
+        IsActive = #{isActive}
+      </set>
+    </if>
+    <set>
+      UpdateAt = SYSDATETIME()
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="memberResultMap">
+    SELECT *
+    FROM Member
+    <where>
+      <if test="id != null">
+        AND Id = #{id}
+      </if>
+      <if test="code != null and code != ''">
+        AND Code = #{code}
+      </if>
+      <if test="name != null and name != ''">
+        AND Name = #{name}
+      </if>
+      <if test="phone != null and phone != ''">
+        AND Phone = #{phone}
+      </if>
+      <if test="email != null and email != ''">
+        AND Email = #{email}
+      </if>
+      <if test="address != null and address != ''">
+        AND Address = #{address}
+      </if>
+      <if test="joinDateS != null and joinDateS != ''">
+        AND JoinDate &gt;= #{joinDateS}
+      </if>
+      <if test="joinDateE != null and joinDateE != ''">
+        AND JoinDate &lt;= #{joinDateE}
+      </if>
+      <if test="totQtyS != null">
+        AND TotQty &gt;= #{totQtyS}
+      </if>
+      <if test="totQtyE != null">
+        AND TotQty &lt;= #{totQtyE}
+      </if>
+      <if test="totAmtS != null">
+        AND TotAmt &gt;= #{totAmtS}
+      </if>
+      <if test="totAmtE != null">
+        AND TotAmt &lt;= #{totAmtE}
+      </if>
+      <if test="totCntS != null">
+        AND TotCnt &gt;= #{totCntS}
+      </if>
+      <if test="totCntE != null">
+        AND TotCnt &lt;= #{totCntE}
+      </if>
+      <if test="isActive != null">
+        AND IsActive = #{isActive}
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND CreateAt &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null and updateAtS != ''">
+        AND UpdateAt &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null and updateAtE != ''">
+        AND UpdateAt &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

@@ -19,10 +19,6 @@ public class PurchaseOrderQueryModel {
   private String dateS;
   private String dateE;
   private List<Integer> supplierId;
-  private Integer totQtyS;
-  private Integer totQtyE;
-  private Integer totAmtS;
-  private Integer totAmtE;
   private String remark;
   private String createAtS;
   private String createAtE;

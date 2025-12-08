@@ -10,16 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseOrderDetailModel {
+public class PurchaseReceiptDetailModel {
   private Integer id;
-  private Integer purchaseOrderId;
+  private Integer purchaseReceiptId;
   @NotNull(message = "商品不可為空")
   private Integer productSkuId;
   private String productSkuCode;
-  @NotNull(message = "採購數量不可為空")
-  private Integer purchaseQty;
-  private Integer receivedQty;
-  private Integer undeliveredQty;
+  @NotNull(message = "收貨數量不可為空")
+  private Integer qty;
   private Double costPrc;
   private Double subTot;
 }
