@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.inventory.inventory.InventoryMapper">
+  <!-- Result Map for Store-->
+  <resultMap id="storeResultMap" type="com.misstilo.cloth_erp_api.model.store.StoreResponse">
+    <id column="StoreId" property="id" />
+    <result column="StoreName" property="name" />
+  </resultMap>
+  <!-- Result Map for ProductSku-->
+  <resultMap id="productSkuResultMap" type="com.misstilo.cloth_erp_api.model.product.ProductSkuResponse">
+    <id column="ProductSkuId" property="id" />
+    <result column="ProductSkuCode" property="skuCode" />
+  </resultMap>
+  <!-- Result Map for Inventory -->
+  <resultMap id="inventoryResultMap" type="com.misstilo.cloth_erp_api.model.product.InventoryResponse">
+    <id column="Id" property="id" />
+    <result column="CurrentQty" property="currentQty" />
+    <result column="PurchaseQty" property="purchaseQty" />
+    <result column="PurchaseReturnQty" property="purchaseReturnQty" />
+    <result column="SaleQty" property="saleQty" />
+    <result column="SaleReturnQty" property="saleReturnQty" />
+    <result column="ActualQty" property="actualQty" />
+    <association property="store" javaType="com.misstilo.cloth_erp_api.model.store.StoreResponse" resultMap="storeResultMap" />
+    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.ProductSkuResponse" resultMap="productSkuResultMap" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO Inventory (StoreId, ProductSkuId, CurrentQty, PurchaseQty, PurchaseReturnQty, SaleQty, SaleReturnQty)
+    VALUES (#{storeId}, #{productSkuId}, #{currentQty}, #{purchaseQty}, #{purchaseReturnQty}, #{saleQty}, #{saleReturnQty})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM Inventory
+    WHERE id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE Inventory
+    <if test="currentQty != null">
+      <set>
+        CurrentQty = #{currentQty}
+      </set>
+    </if>
+    <if test="purchaseQty != null">
+      <set>
+        PurchaseQty = #{purchaseQty}
+      </set>
+    </if>
+    <if test="purchaseReturnQty != null">
+      <set>
+        PurchaseReturnQty = #{purchaseReturnQty}
+      </set>
+    </if>
+    <if test="saleQty != null">
+      <set>
+        SaleQty = #{saleQty}
+      </set>
+    </if>
+    <if test="saleReturnQty != null">
+      <set>
+        SaleReturnQty = #{saleReturnQty}
+      </set>
+    </if>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="inventoryResultMap">
+    SELECT I.*, S.Name AS StoreName, PS.SkuCode AS ProductSkuCode
+    FROM Inventory AS I
+    INNER JOIN Store AS S ON I.StoreId = S.Id
+    INNER JOIN ProductSku AS PS ON I.ProductSkuId = PS.Id
+    <where>
+      <if test="storeId != null">
+        AND I.StoreId IN
+        <foreach collection="storeId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="productSkuId != null">
+        AND I.ProductSkuId IN
+        <foreach collection="productSkuId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

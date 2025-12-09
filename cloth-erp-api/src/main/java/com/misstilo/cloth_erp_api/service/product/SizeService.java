@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.misstilo.cloth_erp_api.mapper.product.SizeMapper;
-import com.misstilo.cloth_erp_api.model.product.SizeModel;
-import com.misstilo.cloth_erp_api.model.product.SizeQueryModel;
+import com.misstilo.cloth_erp_api.mapper.product.size.SizeMapper;
+import com.misstilo.cloth_erp_api.model.product.size.SizeModel;
+import com.misstilo.cloth_erp_api.model.product.size.SizeQueryModel;
 
 import lombok.Builder;
 

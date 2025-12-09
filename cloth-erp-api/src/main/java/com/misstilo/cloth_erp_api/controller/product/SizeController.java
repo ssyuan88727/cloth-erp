@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.product.SizeModel;
-import com.misstilo.cloth_erp_api.model.product.SizeQueryModel;
+import com.misstilo.cloth_erp_api.model.product.size.SizeModel;
+import com.misstilo.cloth_erp_api.model.product.size.SizeQueryModel;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.product.SizeService;
 

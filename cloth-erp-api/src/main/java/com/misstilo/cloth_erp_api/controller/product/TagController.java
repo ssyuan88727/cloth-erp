@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.product.TagModel;
-import com.misstilo.cloth_erp_api.model.product.TagQueryModel;
+import com.misstilo.cloth_erp_api.model.product.tag.TagResponse;
+import com.misstilo.cloth_erp_api.model.product.tag.TagUpdate;
+import com.misstilo.cloth_erp_api.model.product.tag.TagCreate;
+import com.misstilo.cloth_erp_api.model.product.tag.TagQuery;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.product.TagService;
 
@@ -29,7 +31,7 @@ public class TagController {
     private final TagService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid TagModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid TagCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
@@ -39,12 +41,12 @@ public class TagController {
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid TagModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid TagUpdate model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<TagModel>> select(@Valid TagQueryModel model) {
+    public ResponseModel<List<TagResponse>> select(@Valid TagQuery model) {
         return ResponseModel.success(service.select(model));
     }
 }

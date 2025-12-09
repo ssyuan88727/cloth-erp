@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.supplier.supplier.SupplierMapper">
+  <!-- Result Map for Supplier -->
+  <resultMap id="supplierResultMap" type="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
+    <id column="Id" property="id" />
+    <result column="Code" property="code" />
+    <result column="Name" property="name" />
+    <result column="ContactName" property="contactName" />
+    <result column="ContactPhone" property="contactPhone" />
+    <result column="Address" property="address" />
+    <result column="IsActive" property="isActive" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO Supplier (Code, Name, ContactName, ContactPhone, Address, IsActive)
+    VALUES (#{code}, #{name}, #{contactName}, #{contactPhone}, #{address}, #{isActive})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM Supplier
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE Supplier
+    <if test="name != null and name != ''">
+      <set>
+        Name = #{name}
+      </set>
+    </if>
+    <if test="contactName != null and contactName != ''">
+      <set>
+        ContactName = #{contactName}
+      </set>
+    </if>
+    <if test="contactPhone != null and contactPhone != ''">
+      <set>
+        ContactPhone = #{contactPhone}
+      </set>
+    </if>
+    <if test="address != null and address != ''">
+      <set>
+        Address = #{address}
+      </set>
+    </if>
+    <if test="isActive != null">
+      <set>
+        IsActive = #{isActive}
+      </set>
+    </if>
+    <set>
+      UpdateAt = SYSDATETIME()
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="supplierResultMap">
+    SELECT *
+    FROM Supplier
+    <where>
+      <if test="code != null and code != ''">
+        AND Code LIKE #{code} + '%'
+      </if>
+      <if test="name != null and name != ''">
+        AND Name LIKE '%' + #{name} + '%'
+      </if>
+      <if test="contactName != null and contactName != ''">
+        AND ContactName LIKE '%' + #{contactName} + '%'
+      </if>
+      <if test="contactPhone != null and contactPhone != ''">
+        AND ContactPhone LIKE '#{contactPhone} + '%'
+      </if>
+      <if test="address != null and address != ''">
+        AND Address LIKE '%' + #{address} + '%'
+      </if>
+      <if test="isActive != null">
+        AND IsActive = #{isActive}
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND CreateAtS &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND CreateAtE &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null and updateAtS != ''">
+        AND UpdateAtS &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null and updateAtE != ''">
+        AND UpdateAtE &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

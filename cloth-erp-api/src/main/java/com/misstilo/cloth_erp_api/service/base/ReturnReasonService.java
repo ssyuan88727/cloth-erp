@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.misstilo.cloth_erp_api.mapper.base.ReturnReasonMapper;
-import com.misstilo.cloth_erp_api.model.base.ReturnReasonModel;
-import com.misstilo.cloth_erp_api.model.base.ReturnReasonQueryModel;
+import com.misstilo.cloth_erp_api.mapper.base.returnReason.ReturnReasonMapper;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonResponse;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonUpdate;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonCreate;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonQuery;
 
 import lombok.Builder;
 
@@ -17,7 +19,7 @@ public class ReturnReasonService {
     @Autowired
     private final ReturnReasonMapper mapper;
 
-    public Integer insert(ReturnReasonModel model) {
+    public Integer insert(ReturnReasonCreate model) {
         return mapper.insert(model);
     }
 
@@ -25,11 +27,11 @@ public class ReturnReasonService {
         return mapper.delete(id);
     }
 
-    public Integer update(ReturnReasonModel model) {
+    public Integer update(ReturnReasonUpdate model) {
         return mapper.update(model);
     }
 
-    public List<ReturnReasonModel> select(ReturnReasonQueryModel model) {
+    public List<ReturnReasonResponse> select(ReturnReasonQuery model) {
         return mapper.select(model);
     }
 }

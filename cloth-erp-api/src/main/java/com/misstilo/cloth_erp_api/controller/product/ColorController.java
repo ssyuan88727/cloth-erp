@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.product.ColorModel;
-import com.misstilo.cloth_erp_api.model.product.ColorQueryModel;
+import com.misstilo.cloth_erp_api.model.product.color.ColorResponse;
+import com.misstilo.cloth_erp_api.model.product.color.ColorUpdate;
+import com.misstilo.cloth_erp_api.model.product.color.ColorCreate;
+import com.misstilo.cloth_erp_api.model.product.color.ColorQuery;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.product.ColorService;
 
@@ -29,7 +31,7 @@ public class ColorController {
     private final ColorService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid ColorModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid ColorCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
@@ -39,12 +41,12 @@ public class ColorController {
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid ColorModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid ColorUpdate model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<ColorModel>> select(@Valid ColorQueryModel model) {
+    public ResponseModel<List<ColorResponse>> select(@Valid ColorQuery model) {
         return ResponseModel.success(service.select(model));
     }
 }

@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.product.ProductModel;
-import com.misstilo.cloth_erp_api.model.product.ProductQueryModel;
+import com.misstilo.cloth_erp_api.model.product.product.ProductResponse;
+import com.misstilo.cloth_erp_api.model.product.product.ProductUpdate;
+import com.misstilo.cloth_erp_api.model.product.product.ProductCreate;
+import com.misstilo.cloth_erp_api.model.product.product.ProductQuery;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.product.ProductService;
 
@@ -29,7 +31,7 @@ public class ProductController {
     private final ProductService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid ProductModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid ProductCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
@@ -39,12 +41,12 @@ public class ProductController {
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid ProductModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid ProductUpdate model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<ProductModel>> select(@Valid ProductQueryModel model) {
+    public ResponseModel<List<ProductResponse>> select(@Valid ProductQuery model) {
         return ResponseModel.success(service.select(model));
     }
 }

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.product,product.ProductMapper">
+  <!-- Result Map for Product -->
+  <resultMap id="tagResultMap" type="com.misstilo.cloth_erp_api.model.product.tag.TagResponse">
+    <id column="TagId" property="id" />
+    <result column="TagName" property="name" />
+  </resultMap>
+  <resultMap id="productResultMap" type="com.misstilo.cloth_erp_api.model.product.product.ProductResponse">
+    <id column="Id" property="id" />
+    <result column="Code" property="code" />
+    <result column="Name" property="name" />
+    <result column="UnitPrc" property="unitPrc" />
+    <result column="IsActive" property="isActive" />
+    <result column="Remark" property="remark" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+    <collection property="tag" ofType="com.misstilo.cloth_erp_api.model.product.tag.TagResponse" resultMap="tagResultMap" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert" parameterType="com.misstilo.cloth_erp_api.model.product.product.ProductCreate" keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO Product (Code, Name, CategoryId, UnitPrc, IsActive, Remark)
+    VALUES (#{code}, #{name}, #{categoryId}, #{unitPrc}, #{isActive}, #{remark})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM Product
+    WHERE id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE Product
+    <if test="name != null and name != ''">
+      <set>
+        Name = #{name}
+      </set>
+    </if>
+    <if test="categoryId != null">
+      <set>
+        CategoryId = #{categoryId}
+      </set>
+    </if>
+    <if test="unitPrc != null">
+      <set>
+        UnitPrc = #{unitPrc}
+      </set>
+    </if>
+    <if test="isActive != null">
+      <set>
+        IsActive = #{isActive}
+      </set>
+    </if>
+    <if test="remark != null and remark != ''">
+      <set>
+        Remark = #{remark}
+      </set>
+    </if>
+    <set>
+      UpdateAt = SYSDATETIME()
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="productResultMap">
+    SELECT P.*, T.Id AS TagId, T.Name AS TagName
+    FROM Product AS P
+    INNER JOIN ProductTagRel AS PTR ON P.Id = PTR.ProductId
+    INNER JOIN Tag AS T ON PTR.TagId = T.Id
+    <where>
+      <if test="code != null and code != ''">
+        AND P.Code LIKE #{code} + '%'
+      </if>
+      <if test="name != null and name != ''">
+        AND P.Name LIKE '%' + #{name} + '%'
+      </if>
+      <if test="tagId != null">
+        AND T.Id IN
+        <foreach collection="tagId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="isActive != null">
+        AND P.IsActive = #{isActive}
+      </if>
+      <if test="remark != null and remark != ''">
+        AND P.Remark LIKE '%' + #{remark} + '%'
+      </if>
+      <if test="createAtS != null">
+        AND P.CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null">
+        AND P.CreateAt &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null">
+        AND P.UpdateAt &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null">
+        AND P.UpdateAt &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

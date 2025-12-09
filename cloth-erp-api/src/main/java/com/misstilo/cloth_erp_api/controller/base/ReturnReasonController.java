@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.base.ReturnReasonModel;
-import com.misstilo.cloth_erp_api.model.base.ReturnReasonQueryModel;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonResponse;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonUpdate;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonCreate;
+import com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonQuery;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.base.ReturnReasonService;
 
@@ -29,22 +31,22 @@ public class ReturnReasonController {
     private final ReturnReasonService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid ReturnReasonModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid ReturnReasonCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseModel<Integer> delete(@PathVariable @NotNull Integer id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseModel<Integer> delete(@PathVariable @NotNull(message = "Delete: id should not be null.") Integer id) {
         return ResponseModel.success(service.delete(id));
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid ReturnReasonModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid ReturnReasonUpdate model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<ReturnReasonModel>> select(@Valid ReturnReasonQueryModel model) {
+    public ResponseModel<List<ReturnReasonResponse>> select(@Valid ReturnReasonQuery model) {
         return ResponseModel.success(service.select(model));
     }
 }
