@@ -2,6 +2,7 @@ package com.misstilo.cloth_erp_api.handler;
 
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,18 @@ public class GlobalExceptionHandler {
                 .map(error -> error.getDefaultMessage() + "\n")
                 .collect(Collectors.joining("; "));
         return ResponseModel.error("參數驗證失敗", errors);
+    }
+
+    /**
+     * 處理資料重複異常
+     * 
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseModel<?> handleDuplicateKeyException(DuplicateKeyException ex) {
+        return ResponseModel.error("資料已存在", "已有相同資料存在");
     }
 
     /**

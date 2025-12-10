@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductCreate {
     private Integer id;
+    @Pattern(regexp = "^[0-9a-zA-Z]+$", message = "代號僅可為應為字母與數字")
     @NotBlank(message = "代號不可為空")
     @Size(max = 20, message = "代號不可超過20字")
     private String code;

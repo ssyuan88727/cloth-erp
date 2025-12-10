@@ -18,4 +18,6 @@ public interface ProductMapper {
   Integer update(ProductUpdate model);
 
   List<ProductResponse> select(ProductQuery model);
+
+  String getCodeById(Integer id);
 }

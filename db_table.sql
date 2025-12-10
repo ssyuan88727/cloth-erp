@@ -92,7 +92,7 @@ CREATE TABLE
 -- ProductSku (商品 Sku 組合主檔)
 CREATE TABLE
     ProductSku (
-        Id INT PRIMARY KEY, -- 內部識別碼 (例如: P00101-SP001-RED-M)
+        Id INT IDENTITY(1,1) NOT NULL PRIMARY KEY, -- 內部識別碼 (例如: P00101-SP001-RED-M)
         ProductId INT NOT NULL FOREIGN KEY REFERENCES Product (Id), -- 商品ID
         SupplierId INT FOREIGN KEY REFERENCES Supplier (Id), -- 預設供應商
         ColorId INT NOT NULL FOREIGN KEY REFERENCES Color (Id), -- 顏色屬性

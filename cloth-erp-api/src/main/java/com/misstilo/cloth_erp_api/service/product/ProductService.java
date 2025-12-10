@@ -23,24 +23,30 @@ public class ProductService {
     @Autowired
     private final ProductTagRelService productTagRelService;
 
+    @Transactional
     public Integer insert(ProductCreate model) {
+        model.setCode(model.getCode().toUpperCase());
         productMapper.insert(model);
-        productTagRelService.batchInsert(1, model.getTag());
-        return 1;
+        Integer productId = model.getId();
+        productTagRelService.batchInsert(productId, model.getTag());
+        return productId;
     }
 
+    @Transactional
     public Integer delete(Integer id) {
         productTagRelService.deleteByProductId(id);
         return productMapper.delete(id);
     }
 
+    @Transactional
     public Integer update(ProductUpdate model) {
-        productTagRelService.deleteByProductId(model.getId());
-        productTagRelService.batchInsert(model.getId(), model.getTag());
+        productTagRelService.updateByProductId(model.getId(), model.getTag());
         return productMapper.update(model);
     }
 
+    @Transactional
     public List<ProductResponse> select(ProductQuery model) {
+        model.setCode(model.getCode().toUpperCase());
         return productMapper.select(model);
     }
 }

@@ -18,4 +18,6 @@ public interface ColorMapper {
   Integer update(ColorUpdate model);
 
   List<ColorResponse> select(ColorQuery model);
+
+  String getCodeById(Integer id);
 }

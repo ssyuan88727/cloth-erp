@@ -2,16 +2,19 @@ package com.misstilo.cloth_erp_api.service.product;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.misstilo.cloth_erp_api.mapper.product.color.ColorMapper;
+import com.misstilo.cloth_erp_api.mapper.product.product.ProductMapper;
 import com.misstilo.cloth_erp_api.mapper.product.productSku.ProductSkuMapper;
-import com.misstilo.cloth_erp_api.model.product.color.ColorQuery;
-import com.misstilo.cloth_erp_api.model.product.product.ProductQuery;
-import com.misstilo.cloth_erp_api.model.product.prosuctSku.ProductSkuResponse;
-import com.misstilo.cloth_erp_api.model.product.size.SizeQueryModel;
-import com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierQuery;
-import com.misstilo.cloth_erp_api.service.supplier.SupplierService;
+import com.misstilo.cloth_erp_api.mapper.product.size.SizeMapper;
+import com.misstilo.cloth_erp_api.mapper.supplier.supplier.SupplierMapper;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuCreate;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuUpdate;
 
 import lombok.Builder;
 
@@ -21,40 +24,40 @@ public class ProductSkuService {
   @Autowired
   private final ProductSkuMapper mapper;
   @Autowired
-  private final ProductService productService;
+  private final ProductMapper productMapper;
   @Autowired
-  private final SupplierService supplierService;
+  private final SupplierMapper supplierMapper;
   @Autowired
-  private final ColorService colorService;
+  private final ColorMapper colorMapper;
   @Autowired
-  private final SizeService sizeService;
+  private final SizeMapper sizeMapper;
 
-  public Integer insert(ProductSkuResponse model) {
-    // ProductQueryModel productQuery = ProductQueryModel.builder().id(model.getProductId()).build();
-    // String productCode = productService.select(productQuery).get(0).getCode();
-
-    // SupplierQueryModel supplierQuery = SupplierQueryModel.builder().id(model.getSupplierId()).build();
-    // String supplierCode = supplierService.select(supplierQuery).get(0).getCode();
-
-    // ColorQueryModel colorQuery = ColorQueryModel.builder().id(model.getColorId()).build();
-    // String colorCode = colorService.select(colorQuery).get(0).getCode();
-
-    // SizeQueryModel sizeQuery = SizeQueryModel.builder().id(model.getSizeId()).build();
-    // String sizeCode = sizeService.select(sizeQuery).get(0).getCode();
-
-    // model.setSkuCode(productCode + "-" + supplierCode + "-" + colorCode + "-" + sizeCode);
+  @Transactional
+  public Integer insert(ProductSkuCreate model) {
+    String productCode = productMapper.getCodeById(model.getProductId());
+    String supplierCode = supplierMapper.getCodeById(model.getSupplierId());
+    String colorCode = colorMapper.getCodeById(model.getColorId());
+    String sizeCode = sizeMapper.getCodeById(model.getSizeId());
+    if (StringUtils.isBlank(productCode) || StringUtils.isBlank(supplierCode) || StringUtils.isBlank(colorCode)
+        || StringUtils.isBlank(sizeCode)) {
+      throw new IllegalArgumentException("SkuCode 組成要件缺失");
+    }
+    model.setSkuCode(String.join("-", productCode, supplierCode, colorCode, sizeCode));
     return mapper.insert(model);
   }
 
+  @Transactional
   public Integer delete(Integer id) {
     return mapper.delete(id);
   }
 
-  public Integer update(ProductSkuResponse model) {
+  @Transactional
+  public Integer update(ProductSkuUpdate model) {
     return mapper.update(model);
   }
 
-  public List<ProductSkuResponse> select(Integer id) {
-    return mapper.select(id);
+  @Transactional
+  public List<ProductSkuResponse> select(Integer productId) {
+    return mapper.select(productId);
   }
 }

@@ -27,32 +27,22 @@
   <!-- Update -->
   <update id="update">
     UPDATE Supplier
-    <if test="name != null and name != ''">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
-    <if test="contactName != null and contactName != ''">
-      <set>
-        ContactName = #{contactName}
-      </set>
-    </if>
-    <if test="contactPhone != null and contactPhone != ''">
-      <set>
-        ContactPhone = #{contactPhone}
-      </set>
-    </if>
-    <if test="address != null and address != ''">
-      <set>
-        Address = #{address}
-      </set>
-    </if>
-    <if test="isActive != null">
-      <set>
-        IsActive = #{isActive}
-      </set>
-    </if>
     <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+      <if test="contactName != null and contactName != ''">
+        ContactName = #{contactName},
+      </if>
+      <if test="contactPhone != null and contactPhone != ''">
+        ContactPhone = #{contactPhone},
+      </if>
+      <if test="address != null and address != ''">
+        Address = #{address},
+      </if>
+      <if test="isActive != null">
+        IsActive = #{isActive},
+      </if>
       UpdateAt = SYSDATETIME()
     </set>
     <where>
@@ -96,5 +86,8 @@
       </if>
     </where>
     ORDER BY Id
+  </select>
+  <select id="getCodeById">
+    SELECT Code FROM Supplier WHERE Id = #{id}
   </select>
 </mapper>

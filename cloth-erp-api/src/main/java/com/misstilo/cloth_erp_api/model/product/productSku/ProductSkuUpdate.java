@@ -1,4 +1,6 @@
-package com.misstilo.cloth_erp_api.model.inventory.inventory;
+package com.misstilo.cloth_erp_api.model.product.productSku;
+
+import java.math.BigDecimal;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,12 +12,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryUpdate {
+public class ProductSkuUpdate {
     @NotNull(message = "Update: Id is required.")
     private Integer id;
-    private Integer currentQty;
-    private Integer purchaseQty;
-    private Integer purchaseReturnQty;
-    private Integer saleQty;
-    private Integer saleReturnQty;
+    @NotNull(message = "成本價不可為空")
+    private BigDecimal costPrc;
+    private Boolean isActive;
 }

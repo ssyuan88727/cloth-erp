@@ -4,10 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.misstilo.cloth_erp_api.mapper.product.size.SizeMapper;
-import com.misstilo.cloth_erp_api.model.product.size.SizeModel;
-import com.misstilo.cloth_erp_api.model.product.size.SizeQueryModel;
+import com.misstilo.cloth_erp_api.model.product.size.SizeResponse;
+import com.misstilo.cloth_erp_api.model.product.size.SizeUpdate;
+import com.misstilo.cloth_erp_api.model.product.size.SizeCreate;
+import com.misstilo.cloth_erp_api.model.product.size.SizeQuery;
 
 import lombok.Builder;
 
@@ -17,19 +20,25 @@ public class SizeService {
     @Autowired
     private final SizeMapper mapper;
 
-    public Integer insert(SizeModel model) {
+    @Transactional
+    public Integer insert(SizeCreate model) {
+        model.setCode(model.getCode().toUpperCase());
         return mapper.insert(model);
     }
 
+    @Transactional
     public Integer delete(Integer id) {
         return mapper.delete(id);
     }
 
-    public Integer update(SizeModel model) {
+    @Transactional
+    public Integer update(SizeUpdate model) {
         return mapper.update(model);
     }
 
-    public List<SizeModel> select(SizeQueryModel model) {
+    @Transactional
+    public List<SizeResponse> select(SizeQuery model) {
+        model.setCode(model.getCode().toUpperCase());
         return mapper.select(model);
     }
 }

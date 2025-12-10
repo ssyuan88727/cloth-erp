@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreUpdate {
-    @NotNull(message = "Update: Id should not be null.")
+    @NotNull(message = "Update: Id is required.")
     private Integer id;
     @NotBlank(message = "名稱不可為空")
     @Size(max = 20, message = "名稱不可超過20字")

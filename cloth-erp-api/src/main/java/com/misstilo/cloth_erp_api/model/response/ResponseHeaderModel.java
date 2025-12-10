@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ResponseHeaderModel {
-    @NotNull(message = "Status should not be null.")
+    @NotNull(message = "Status is required.")
     private Boolean status;
     private String title;
     private String message;

@@ -31,37 +31,25 @@
   <!-- Update -->
   <update id="update">
     UPDATE Member
-    <if test="code != null and code != ''">
-      <set>
-        Code = #{code}
-      </set>
-    </if>
-    <if test="name != null and name != ''">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
-    <if test="email != null and email != ''">
-      <set>
-        Email = #{email}
-      </set>
-    </if>
-    <if test="address != null and address != ''">
-      <set>
-        Address = #{address}
-      </set>
-    </if>
-    <if test="joinDate != null and joinDate != ''">
-      <set>
-        JoinDate = #{joinDate}
-      </set>
-    </if>
-    <if test="isActive != null and isActive != ''">
-      <set>
-        IsActive = #{isActive}
-      </set>
-    </if>
     <set>
+      <if test="code != null and code != ''">
+        Code = #{code},
+      </if>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+      <if test="email != null and email != ''">
+        Email = #{email},
+      </if>
+      <if test="address != null and address != ''">
+        Address = #{address},
+      </if>
+      <if test="joinDate != null and joinDate != ''">
+        JoinDate = #{joinDate},
+      </if>
+      <if test="isActive != null and isActive != ''">
+        IsActive = #{isActive},
+      </if>
       UpdateAt = SYSDATETIME()
     </set>
     <where>

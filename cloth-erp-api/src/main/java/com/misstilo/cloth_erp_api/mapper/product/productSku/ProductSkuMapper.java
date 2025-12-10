@@ -4,15 +4,17 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.misstilo.cloth_erp_api.model.product.prosuctSku.ProductSkuResponse;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuCreate;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuUpdate;
 
 @Mapper
 public interface ProductSkuMapper {
-  Integer insert(ProductSkuResponse model);
+  Integer insert(ProductSkuCreate model);
 
   Integer delete(Integer id);
 
-  Integer update(ProductSkuResponse model);
+  Integer update(ProductSkuUpdate model);
 
-  List<ProductSkuResponse> select(Integer id);
+  List<ProductSkuResponse> select(Integer productId);
 }

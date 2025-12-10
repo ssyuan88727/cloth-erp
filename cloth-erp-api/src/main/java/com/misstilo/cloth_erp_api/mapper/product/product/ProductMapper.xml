@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.misstilo.cloth_erp_api.mapper.product,product.ProductMapper">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.product.product.ProductMapper">
   <!-- Result Map for Product -->
   <resultMap id="tagResultMap" type="com.misstilo.cloth_erp_api.model.product.tag.TagResponse">
     <id column="TagId" property="id" />
@@ -20,8 +20,8 @@
 
   <!-- Insert -->
   <insert id="insert" parameterType="com.misstilo.cloth_erp_api.model.product.product.ProductCreate" keyProperty="id" useGeneratedKeys="true">
-    INSERT INTO Product (Code, Name, CategoryId, UnitPrc, IsActive, Remark)
-    VALUES (#{code}, #{name}, #{categoryId}, #{unitPrc}, #{isActive}, #{remark})
+    INSERT INTO Product (Code, Name, UnitPrc, IsActive, Remark)
+    VALUES (#{code}, #{name}, #{unitPrc}, #{isActive}, #{remark})
   </insert>
   <!-- Delete -->
   <delete id="delete">
@@ -31,32 +31,19 @@
   <!-- Update -->
   <update id="update">
     UPDATE Product
-    <if test="name != null and name != ''">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
-    <if test="categoryId != null">
-      <set>
-        CategoryId = #{categoryId}
-      </set>
-    </if>
-    <if test="unitPrc != null">
-      <set>
-        UnitPrc = #{unitPrc}
-      </set>
-    </if>
-    <if test="isActive != null">
-      <set>
-        IsActive = #{isActive}
-      </set>
-    </if>
-    <if test="remark != null and remark != ''">
-      <set>
-        Remark = #{remark}
-      </set>
-    </if>
     <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+      <if test="unitPrc != null">
+        UnitPrc = #{unitPrc},
+      </if>
+      <if test="isActive != null">
+        IsActive = #{isActive},
+      </if>
+      <if test="remark != null and remark != ''">
+        Remark = #{remark},
+      </if>
       UpdateAt = SYSDATETIME()
     </set>
     <where>
@@ -76,9 +63,9 @@
       <if test="name != null and name != ''">
         AND P.Name LIKE '%' + #{name} + '%'
       </if>
-      <if test="tagId != null">
-        AND T.Id IN
-        <foreach collection="tagId" item="id" open="(" separator="," close=")">
+      <if test="tag != null and tag.length > 0">
+        AND PTR.TagId IN
+        <foreach collection="tag" item="id" open="(" separator="," close=")">
           #{id}
         </foreach>
       </if>
@@ -88,19 +75,22 @@
       <if test="remark != null and remark != ''">
         AND P.Remark LIKE '%' + #{remark} + '%'
       </if>
-      <if test="createAtS != null">
+      <if test="createAtS != null and createAtS != ''">
         AND P.CreateAt &gt;= #{createAtS}
       </if>
-      <if test="createAtE != null">
+      <if test="createAtE != null and createAtE != ''">
         AND P.CreateAt &lt;= #{createAtE}
       </if>
-      <if test="updateAtS != null">
+      <if test="updateAtS != null and updateAtS != ''">
         AND P.UpdateAt &gt;= #{updateAtS}
       </if>
-      <if test="updateAtE != null">
+      <if test="updateAtE != null and updateAtE != ''">
         AND P.UpdateAt &lt;= #{updateAtE}
       </if>
     </where>
     ORDER BY Id
+  </select>
+  <select id="getCodeById">
+    SELECT Code FROM Product WHERE Id = #{id}
   </select>
 </mapper>

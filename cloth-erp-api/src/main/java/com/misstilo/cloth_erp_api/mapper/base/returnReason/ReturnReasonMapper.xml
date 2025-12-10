@@ -20,11 +20,11 @@
   <!-- Update -->
   <update id="update">
     UPDATE ReturnReason
-    <if test="reason != null and reason != ''">
-      <set>
-        Reason = #{reason}
-      </set>
-    </if>
+    <set>
+      <if test="reason != null and reason != ''">
+        Reason = #{reason},
+      </if>
+    </set>
     <where>
       Id = #{id}
     </where>

@@ -21,11 +21,11 @@
   <!-- Update -->
   <update id="update">
     UPDATE Color
-    <if test="name != null">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
+    <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+    </set>
     <where>
       Id = #{id}
     </where>
@@ -43,5 +43,8 @@
       </if>
     </where>
     ORDER BY Id
+  </select>
+  <select id="getCodeById">
+    SELECT Code FROM Color WHERE Id = #{id}
   </select>
 </mapper>

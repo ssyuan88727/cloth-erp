@@ -20,11 +20,11 @@
   <!-- Update -->
   <update id="update">
     UPDATE StoreType
-    <if test="name != null and name != ''">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
+    <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+    </set>
     <where>
       Id = #{id}
     </where>

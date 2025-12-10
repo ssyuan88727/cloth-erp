@@ -36,7 +36,7 @@ public class ReturnReasonController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseModel<Integer> delete(@PathVariable @NotNull(message = "Delete: id should not be null.") Integer id) {
+    public ResponseModel<Integer> delete(@PathVariable @NotNull(message = "Delete: id is required.") Integer id) {
         return ResponseModel.success(service.delete(id));
     }
 

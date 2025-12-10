@@ -6,7 +6,7 @@
     <result column="StoreTypeName" property="name" />
   </resultMap>
   <!-- Result Map for Store -->
-  <resultMap id="storeResultMap" type="com.misstilo.cloth_erp_api.model.store.store.StoreRe">
+  <resultMap id="storeResultMap" type="com.misstilo.cloth_erp_api.model.store.store.StoreResponse">
     <id column="Id" property="id" />
     <result column="Code" property="code" />
     <result column="Name" property="name" />
@@ -29,22 +29,16 @@
   <!-- Update -->
   <update id="update">
     UPDATE Store
-    <if test="name != null and name != ''">
-      <set>
-        Name = #{name}
-      </set>
-    </if>
-    <if test="storeTypeId != null">
-      <set>
-        StoreTypeId = #{storeTypeId}
-      </set>
-    </if>
-    <if test="isActive != null">
-      <set>
-        IsActive = #{isActive}
-      </set>
-    </if>
     <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+      <if test="storeTypeId != null">
+        StoreTypeId = #{storeTypeId},
+      </if>
+      <if test="isActive != null">
+        IsActive = #{isActive},
+      </if>
       UpdateAt = SYSDATETIME()
     </set>
     <where>

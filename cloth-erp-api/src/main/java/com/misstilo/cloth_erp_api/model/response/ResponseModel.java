@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseModel<T> {
-    @NotNull(message = "Header should not be null.")
+    @NotNull(message = "Header is required.")
     @Valid
     private ResponseHeaderModel header;
     private T body;

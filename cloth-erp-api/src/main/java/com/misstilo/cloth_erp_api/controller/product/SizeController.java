@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.misstilo.cloth_erp_api.model.product.size.SizeModel;
-import com.misstilo.cloth_erp_api.model.product.size.SizeQueryModel;
+import com.misstilo.cloth_erp_api.model.product.size.SizeResponse;
+import com.misstilo.cloth_erp_api.model.product.size.SizeUpdate;
+import com.misstilo.cloth_erp_api.model.product.size.SizeCreate;
+import com.misstilo.cloth_erp_api.model.product.size.SizeQuery;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.service.product.SizeService;
 
@@ -29,22 +31,22 @@ public class SizeController {
     private final SizeService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid SizeModel model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid SizeCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseModel<Integer> delete(@PathVariable @NotNull Integer id) {
+    public ResponseModel<Integer> delete(@PathVariable @NotNull(message = "Delete: Id is required.") Integer id) {
         return ResponseModel.success(service.delete(id));
     }
 
     @PutMapping("/update")
-    public ResponseModel<Integer> update(@RequestBody @Valid SizeModel model) {
+    public ResponseModel<Integer> update(@RequestBody @Valid SizeUpdate model) {
         return ResponseModel.success(service.update(model));
     }
 
     @GetMapping("/select")
-    public ResponseModel<List<SizeModel>> select(@Valid SizeQueryModel model) {
+    public ResponseModel<List<SizeResponse>> select(@Valid SizeQuery model) {
         return ResponseModel.success(service.select(model));
     }
 }

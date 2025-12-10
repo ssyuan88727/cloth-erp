@@ -1,6 +1,6 @@
 package com.misstilo.cloth_erp_api.model.inventory.inventory;
 
-import com.misstilo.cloth_erp_api.model.product.prosuctSku.ProductSkuResponse;
+import com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse;
 import com.misstilo.cloth_erp_api.model.store.store.StoreResponse;
 
 import lombok.AllArgsConstructor;

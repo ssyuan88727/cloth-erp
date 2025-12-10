@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReturnReasonUpdate {
-    @NotNull(message = "Update: id should not be null.")
+    @NotNull(message = "Update: id is required.")
     private Integer id;
     @NotBlank(message = "原因不可為空")
     @Size(max = 10, message = "原因不可超過10字")

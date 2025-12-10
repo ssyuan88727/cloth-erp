@@ -18,4 +18,6 @@ public interface SupplierMapper {
     Integer update(SupplierUpdate model);
 
     List<SupplierResponse> select(SupplierQuery model);
+
+    String getCodeById(Integer id);
 }
