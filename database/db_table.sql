@@ -120,6 +120,26 @@ CREATE TABLE
         CONSTRAINT UQ_Inventory_Sku_Store UNIQUE (StoreId, ProductSkuId)
     );
 
+-- InventoryLogType (庫存異動類別字典表)
+CREATE TABLE
+    InventoryLogType (
+        Id INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+        Name NVARCHAR(20) NOT NULL -- 庫存異動名稱
+    );
+
+-- InventoryLog (庫存異動表)
+CREATE TABLE
+    InventoryLog (
+        Id INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+        InventoryLogTypeId INT NOT NULL FOREIGN KEY REFERENCES InventoryLogType (Id), -- 庫存異動代號
+        StoreId INT NOT NULL FOREIGN KEY REFERENCES Store (Id), -- 店點 Id
+        ProductSkuId INT NOT NULL FOREIGN KEY REFERENCES ProductSku (Id), -- 商品 Sku Id
+        Qty INT NOT NULL DEFAULT 1, -- 異動數量
+        BeforeQty INT NOT NULL DEFAULT 0, -- 異動前數量
+        AfterQty AS (BeforeQty + Qty), -- 異動後數量
+        CreateAt DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),
+    );
+
 -- #######################################################################
 -- # III. 供應鏈與採購模組 (SCM & Purchasing)
 -- #######################################################################
@@ -134,7 +154,7 @@ CREATE TABLE
         SupplierId INT NOT NULL FOREIGN KEY REFERENCES Supplier (Id), -- 供應商ID
         TotQty INT NOT NULL DEFAULT 0, -- 訂單總數量
         TotAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 訂單總金額
-        Remark NVARCHAR (200), -- 備註
+        Remark NVARCHAR (255), -- 備註
         CreateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (),
         UpdateAt DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME ()
     );
@@ -145,11 +165,11 @@ CREATE TABLE
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         PurchaseOrderId INT NOT NULL FOREIGN KEY REFERENCES PurchaseOrder (Id), -- 採購訂單ID
         ProductSkuId INT NOT NULL FOREIGN KEY REFERENCES ProductSku (Id), -- 採購 Sku ID
-        PurchaseQty INT NOT NULL, -- 採購數量
-        ReceivedQty INT DEFAULT 0, -- 已收貨數量
+        PurchaseQty INT NOT NULL DEFAULT 1, -- 採購數量
+        ReceivedQty INT NOT NULL DEFAULT 0, -- 已收貨數量
         UndeliveredQty AS (PurchaseQty - ReceivedQty), -- 尚欠數量
-        CostPrc DECIMAL(18, 2) NOT NULL, -- 單位成本
-        SubTot DECIMAL(18, 2) NOT NULL, -- 小計
+        CostPrc DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 單位成本
+        SubTot AS (PurchaseQty * CostPrc), -- 小計
         CONSTRAINT UQ_PurchaseOrderDetail UNIQUE (PurchaseOrderId, ProductSkuId)
     );
 
@@ -176,8 +196,8 @@ CREATE TABLE
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         PurchaseReceiptId INT NOT NULL FOREIGN KEY REFERENCES PurchaseReceipt (Id), -- 採購收貨ID
         ProductSkuId INT NOT NULL FOREIGN KEY REFERENCES ProductSku (Id), -- 採購 Sku ID
-        Qty INT NOT NULL, -- 收貨數量
-        CostPrc DECIMAL(18, 2) NOT NULL, -- 單位成本
+        Qty INT NOT NULL DEFAULT 1, -- 收貨數量
+        CostPrc DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 單位成本
         SubTot AS (Qty * CostPrc), -- 小計
         CONSTRAINT UQ_PurchaseReceiptDetail UNIQUE (PurchaseReceiptId, ProductSkuId)
     );
