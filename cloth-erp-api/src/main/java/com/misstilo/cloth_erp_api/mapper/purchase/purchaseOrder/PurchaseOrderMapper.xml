@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseOrder.PurchaseOrderMapper">
+  <!-- Result Map for Supplier-->
+  <resultMap id="supplierResultMap" type="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
+    <id column="SupplierId" property="id" />
+    <result column="SupplierName" property="name" />
+  </resultMap>
+  <!-- Result Map for PurchaseOrder -->
+  <resultMap id="purchaseOrderResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseOrder.PurchaseOrderResponse">
+    <id column="Id" property="id" />
+    <result column="Confirmed" property="confirmed" />
+    <result column="Signed" property="signed" />
+    <result column="Code" property="code" />
+    <result column="Date" property="date" />
+    <result column="TotQty" property="totQty" />
+    <result column="TotAmt" property="totAmt" />
+    <result column="Remark" property="remark" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+    <association property="supplier" resultMap="supplierResultMap" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO PurchaseOrder (Code, Date, SupplierId, Remark)
+    VALUES (#{code}, #{date}, #{supplierId}, #{remark})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM PurchaseOrder
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE PurchaseOrder
+    <set>
+      <if test="confirmed != null">
+        Confirmed = #{confirmed},
+      </if>
+      <if test="signed != null">
+        Signed = #{signed},
+      </if>
+      <if test="date != null and date != ''">
+        Date = #{date},
+      </if>
+      <if test="remark != null and remark != ''">
+        Remark = #{remark},
+      </if>
+      UpdateAt = SYSDATETIME()
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="purchaseOrderResultMap">
+    SELECT PO.*, S.Name AS SupplierName
+    FROM PurchaseOrder AS PO
+    INNER JOIN Supplier AS S ON PO.SupplierId = S.Id
+    <where>
+      <if test="confirmed != null">
+        AND PO.Confirmed = #{confirmed}
+      </if>
+      <if test="signed != null">
+        AND PO.Signed = #{signed}
+      </if>
+      <if test="code != null and code != ''">
+        AND PO.Code LIKE #{code} + '%'
+      </if>
+      <if test="dateS != null and dateS != ''">
+        AND PO.Date &gt;= #{dateS}
+      </if>
+      <if test="dateE != null and dateE != ''">
+        AND PO.Date &lt;= #{dateE}
+      </if>
+      <if test="supplierId != null and supplierId.size > 0">
+        AND PO.SupplierId IN
+        <foreach collection="supplierId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="remark != null and remark != ''">
+        AND PO.Remark LIKE '%' + #{remark} + '%'
+      </if>
+      <if test="createS != null and createS != ''">
+        AND PO.CreateAt &gt;= #{createS}
+      </if>
+      <if test="createE != null and createE != ''">
+        AND PO.CreateAt &lt;= #{createE}
+      </if>
+      <if test="updateS != null and updateS != ''">
+        AND PO.UpdateAt &gt;= #{updateS}
+      </if>
+      <if test="updateE != null and updateE != ''">
+        AND PO.UpdateAt &lt;= #{updateE}
+      </if>
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

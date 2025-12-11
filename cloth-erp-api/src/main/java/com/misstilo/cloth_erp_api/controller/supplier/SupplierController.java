@@ -37,7 +37,7 @@ public class SupplierController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseModel<Integer> delete(@PathVariable @NotNull Integer id) {
+    public ResponseModel<Integer> delete(@PathVariable @NotNull(message = "Delete: Id is required.") Integer id) {
         return ResponseModel.success(service.delete(id));
     }
 

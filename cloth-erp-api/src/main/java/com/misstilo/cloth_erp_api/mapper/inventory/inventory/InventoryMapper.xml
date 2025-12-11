@@ -20,8 +20,8 @@
     <result column="SaleQty" property="saleQty" />
     <result column="SaleReturnQty" property="saleReturnQty" />
     <result column="ActualQty" property="actualQty" />
-    <association property="store" javaType="com.misstilo.cloth_erp_api.model.store.store.StoreResponse" resultMap="storeResultMap" />
-    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse" resultMap="productSkuResultMap" />
+    <association property="store" resultMap="storeResultMap" />
+    <association property="productSku" resultMap="productSkuResultMap" />
   </resultMap>
 
   <!-- Insert -->
@@ -65,13 +65,13 @@
     INNER JOIN Store AS S ON I.StoreId = S.Id
     INNER JOIN ProductSku AS PS ON I.ProductSkuId = PS.Id
     <where>
-      <if test="storeId != null">
+      <if test="storeId != null and storeId.size > 0">
         AND I.StoreId IN
         <foreach collection="storeId" item="id" open="(" separator="," close=")">
           #{id}
         </foreach>
       </if>
-      <if test="productSkuId != null">
+      <if test="productSkuId != null and productSkuId.size > 0">
         AND I.ProductSkuId IN
         <foreach collection="productSkuId" item="id" open="(" separator="," close=")">
           #{id}

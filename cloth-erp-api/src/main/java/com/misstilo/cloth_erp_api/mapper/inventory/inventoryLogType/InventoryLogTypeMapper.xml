@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.inventory.inventoryLogType.InventoryLogTypeMapper">
+  <!-- Result Map for InventoryLogType -->
+  <resultMap id="inventoryLogTypeResultMap" type="com.misstilo.cloth_erp_api.model.inventory.inventoryLogType.InventoryLogTypeResponse">
+    <id column="Id" property="id" />
+    <result column="Name" property="name" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO InventoryLogType (Name)
+    VALUES (#{name})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM InventoryLogType WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE IventoryLogType
+    <set>
+      <if test="name != null and name != ''">
+        Name = #{name},
+      </if>
+    </set>
+    WHERE Id = #{id}
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="inventoryLogTypeResultMap">
+    SELECT *
+    FROM InventoryLogType
+    <where>
+      <if test="id != null">
+        AND Id = #{id}
+      </if>
+      <if test="name != null and name != ''">
+        AND Name LIKE '%' + #{name} + '%'
+      </if>
+    </where>
+  </select>
+</mapper>

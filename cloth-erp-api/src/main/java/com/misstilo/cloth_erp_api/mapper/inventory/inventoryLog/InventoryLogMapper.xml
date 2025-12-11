@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.inventory.inventoryLog.InventoryLogMapper">
+  <!-- Result Map for InventoryLog -->
+  <resultMap id="inventoryLogResultMap" type="com.misstilo.cloth_erp_api.model.inventory.inventoryLog.InventoryLogResponse">
+    <id column="Id" property="id" />
+    <result column="InventoryLogTypeName" property="inventoryLogTypeName" />
+    <result column="StoreName" property="storeName" />
+    <result column="ProductSkuCode" property="productSkuCode" />
+    <result column="Qty" property="qty" />
+    <result column="BeforeQty" property="beforeQty" />
+    <result column="AfterQty" property="afterQty" />
+    <result column="CreateAt" property="createAt" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO InventoryLog (InventoryLogTypeId, StoreId, ProductSkuId, Qty, BeforeQty)
+    VALUES (#{inventoryLogTypeId}, #{storeId}, #{productSkuId}, #{qty}, #{beforeQty})
+  </insert>
+  <!-- Select -->
+  <select id="select" resultMap="inventoryLogResultMap">
+    SELECT IL.*, ILT.Name AS InventoryLogTypeName, S.Name AS StoreName, PS.SkuCode AS ProductSkuCode
+    FROM InventoryLog AS IL
+    INNER JOIN InventoryLogType AS ILT ON IL.InventoryLogTypeId = ILT.Id
+    INNER JOIN Store AS S ON IL.StoreId = S.Id
+    INNER JOIN ProductSku AS PS ON IL.ProductSkuId = PS.Id
+    <where>
+      <if test="inventoryLogTypeId != null and inventoryLogTypeId.size > 0">
+        AND IL.InventoryLogTypeId IN
+        <foreach collection="inventoryLogTypeId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="storeId != null and storeId.size > 0">
+        AND IL.StoreId IN
+        <foreach collection="storeId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="productSkuId != null and productSkuId.size > 0">
+        AND Il.ProductSkuId IN
+        <foreach collection="productSkuId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND IL.CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND IL.CreateAt &lt;= #{createAtE}
+      </if>
+    </where>
+  </select>
+</mapper>

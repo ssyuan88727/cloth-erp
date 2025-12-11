@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseOrderDetail.PurchaseOrderDetailMapper">
+  <!-- Result Map for ProductSku-->
+  <resultMap id="productSkuResultMap" type="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
+    <id column="ProductSkuId" property="id" />
+    <result column="ProductSkuCode" property="skuCode" />
+  </resultMap>
+  <!-- Result Map for PurchaseOrderDetail -->
+  <resultMap id="purchaseOrderDetailResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseOrderDetail.PurchaseOrderDetailResponse">
+    <id column="Id" property="id" />
+    <result column="PurchaseOrderId" property="purchaseOrderId" />
+    <result column="PurchaseQty" property="purchaseQty" />
+    <result column="ReceiveQty" property="receiveQty" />
+    <result column="UndeliveredQty" property="undeliveredQty" />
+    <result column="CostQty" property="costQty" />
+    <result column="SubTot" property="subTot" />
+    <association property="productSku" resultMap="productSkuResultMap" />
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO PurchaseOrderDetail (PurchaseOrderId, ProductSkuId, PurchaseQty, CostQty)
+    VALUES (#{purchaseOrderId}, #{productSkuId}, #{purchaseQty}, #{costQty})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM PurchaseOrderDetail
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE PurchaseOrderDetail
+    <set>
+      <if test="purchaseQty != null and purchaseQty > 0">
+        PurchaseQty = #{purchaseQty},
+      </if>
+      <if test="receiveQty != null">
+        ReceiveQty = #{receiveQty},
+      </if>
+      <if test="undeliveredQty != null">
+        UndeliveredQty = #{undeliveredQty},
+      </if>
+      <if test="costPrc != null">
+        CostPrc = #{costPrc},
+      </if>
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="purchaseOrderDetailResultMap">
+    SELECT POD.*, PS.SkuCode AS ProductSkuCode
+    FROM PurchaseOrderDetail AS POD
+    INNER JOIN ProductSku AS PS ON POD.ProductSkuId = PS.Id
+    <where>
+      POD.PurchaseOrderId = #{purchaseOrderId}
+    </where>
+    ORDER BY Id DESC
+  </select>
+</mapper>

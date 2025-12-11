@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.store.store.StoreMapper">
+  <!-- Result Map for StoreType-->
   <resultMap id="storeTypeResultMap" type="com.misstilo.cloth_erp_api.model.store.storeType.StoreTypeResponse">
     <id column="StoreTypeId" property="id" />
     <result column="StoreTypeName" property="name" />
@@ -13,7 +14,7 @@
     <result column="IsActive" property="isActive" />
     <result column="CreateAt" property="createAt" />
     <result column="UpdateAt" property="updateAt" />
-    <association property="storeType" javaType="com.misstilo.cloth_erp_api.model.store.storeType.StoreTypeResponse" resultMap="storeTypeResultMap" />
+    <association property="storeType" resultMap="storeTypeResultMap" />
   </resultMap>
 
   <!-- Insert -->
@@ -57,7 +58,7 @@
       <if test="name != null and name != ''">
         AND S.Name LIKE '%' + #{name} + '%'
       </if>
-      <if test="storeTypeId != null">
+      <if test="storeTypeId != null and storeTypeId.size > 0">
         AND S.StoreTypeId IN
         <foreach collection="storeTypeId" item="id" open="(" separator="," close=")">
           #{id}
