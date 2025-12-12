@@ -269,15 +269,24 @@ CREATE TABLE
         Name NVARCHAR (10) NOT NULL UNIQUE -- 例如: 信用卡, 貨到付款
     );
 
+-- SalesOrderStatus (訂單狀態字典表)
+CREATE TABLE
+    SalesOrderStatus (
+        Id INT NOT NULL IDENTITY (1, 1) PRIMARY KEY, -- 訂單狀態 ID
+        Name NVARCHAR (10) NOT NULL UNIQUE -- 訂單狀態名稱, 0.新訂單, 1.處理中, 2.已完成, 3.已取消
+    );
+
 -- SalesOrder (銷售訂單主表) - 線上/Shopee/MOMO
 CREATE TABLE
     SalesOrder (
         Id INT IDENTITY (1, 1) PRIMARY KEY,
         Code VARCHAR(20) NOT NULL UNIQUE, -- 訂單號
         Date DATETIME2 (3) NOT NULL DEFAULT SYSDATETIME (), -- 訂單日期
+        OriginalCode VARCHAR(20), -- 原始單號
         MemberId INT FOREIGN KEY REFERENCES Member (Id), -- 會員ID
         StoreId INT NOT NULL FOREIGN KEY REFERENCES Store (Id), -- 銷售/出貨地點
         SalesPlatformId INT NOT NULL DEFAULT 0 FOREIGN KEY REFERENCES SalesPlatform (Id), -- 銷售平台, 0=線下, 1=Shopee, 2=MOMO
+        TotQty INT NOT NULL DEFAULT 1, -- 訂單總數量
         TotAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 訂單總金額
         DiscAmt DECIMAL(18, 2) NOT NUll DEFAULT 0, -- 折扣金額
         TaxAmt DECIMAL(18, 2) NOT NULL DEFAULT 0, -- 稅金
