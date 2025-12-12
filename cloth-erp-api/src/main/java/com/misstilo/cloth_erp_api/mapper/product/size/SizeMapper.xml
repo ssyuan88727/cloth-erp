@@ -22,7 +22,7 @@
   <update id="update">
     UPDATE Size
     <set>
-      <if test="name != null and name != ''">
+      <if test="name != null">
         Name = #{name},
       </if>
     </set>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.sales.salesOrder.SalesOrderMapper">
+  <!-- Result Map for SalesOrder -->
+  <resultMap id="saleOrderResultMap" type="com.misstilo.cloth_erp_api.model.sales.salesOrder.SalesOrderResponse">
+    <id column="Id" property="id" />
+    <result column="Code" property="code" />
+    <result column="Date" property="date" />
+    <result column="OriginalCode" property="originalCode" />
+    <result column="TotQty" property="totQty" />
+    <result column="TotAmt" property="totAmt" />
+    <result column="DiscAmt" property="discAmt" />
+    <result column="TaxAmt" property="taxAmt" />
+    <result column="DeliveryFee" property="deliveryFee" />
+    <result column="PlatformFee" property="platformFee" />
+    <result column="Status" property="status" />
+    <result column="Remark" property="remark" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+    <association property="member" javaType="com.misstilo.cloth_erp_api.model.member.member.MemberResponse">
+      <id column="MemberId" property="id"/>
+      <result column="MemberCode" property="code"/>
+      <result column="MemberName" property="name"/>
+    </association>
+    <association property="store" javaType="com.misstilo.cloth_erp_api.model.store.store.StoreResponse">
+      <id column="StoreId" property="id"/>
+      <result column="StoreName" property="name"/>
+    </association>
+    <association property="salesPlatform" javaType="com.misstilo.cloth_erp_api.model.sales.salesPlatform.SalesPlatformResponse">
+      <id column="SalesPlatformId" property="id"/>
+      <result column="PlatformName" property="name"/>
+    </association>
+    <association property="salesOrderStatus" javaType="com.misstilo.cloth_erp_api.model.sales.salesOrderStatus.SalesOrderStatusResponse">
+      <id column="Status" property="id"/>
+      <result column="StatusName" property="name"/>
+    </association>
+    <association property="paymentMethod" javaType="com.misstilo.cloth_erp_api.model.sales.paymentMethod.PaymentMethodResponse">
+      <id column="PaymentMethodId" property="id"/>
+      <result column="PaymentMethod" property="name"/>
+    </association>
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert" parameterMap="">
+    INSERT INTO SalesOrder (Code, Date, OriginalCode, MemberId, StoreId, SalesPlatformId, DeliveryFee, PlatformFee, Status, PaymentMethodId, Remark)
+    VALUES (#{code}, #{date}, #{originalCode}, #{memberId}, #{storeId}, #{salesPlatformId}, #{deliveryFee}, #{platformFee}, #{status}, #{paymentMethodId}, #{remark})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM SalesOrder
+    WHERE id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE SalesOrder
+    <set>
+      <if test="!= null">
+        OriginalCode = #{originalCode},
+      </if>
+      <if test="!= null">
+        MemberId = #{memberId},
+      </if>
+      <if test="!= null">
+        TotQty = #{totQty},
+      </if>
+      <if test="!= null">
+        TotAmt = #{totAmt},
+      </if>
+      <if test="!= null">
+        DiscAmt = #{discAmt},
+      </if>
+      <if test="!= null">
+        TaxAmt = #{taxAmt},
+      </if>
+      <if test="!= null">
+        DeliveryFee = #{deliveryFee},
+      </if>
+      <if test="!= null">
+        PlatformFee = #{platformFee},
+      </if>
+      <if test="!= null">
+        Status = #{status},
+      </if>
+      <if test="!= null">
+        PaymentMethodId = #{paymentMethodId},
+      </if>
+      <if test="!= null">
+        Remark = #{remark,}
+      </if>
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="saleOrderResultMap">
+    SELECT SO.*, M.Name AS MemberName, S.Name AS StoreName, SP.Name AS PlatformName, SOS.Name AS StatusName, PM.Name AS PaymentMethod
+    FROM SalesOrder AS SO
+    INNER JOIN Member AS M ON SO.MemberId = M.Id
+    INNER JOIN Store AS S ON SO.StoreId = S.Id
+    INNER JOIN SalesPlatform AS SP ON SO.SalesPlatformId = SP.Id
+    INNER JOIN SalesOrderStatus AS SOS ON SO.Status = SOS.Id
+    INNER JOIN PaymentMethod AS PM ON SO.PaymentMethodId = PM.Id
+    <where>
+      <if test="code != null and code != ''">
+        AND SO.Code = #{code}
+      </if>
+      <if test="dateS != null and dateS != ''">
+        AND SO.Date &gt;= #{dateS}
+      </if>
+      <if test="dateE != null and dateE != ''">
+        AND SO.Date &lt;= #{dateE}
+      </if>
+      <if test="memberId != null and memberId.length > 0">
+        AND SO.MemberId IN
+        <foreach collection="memberId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="storeId != null and storeId.length > 0">
+        AND SO.StoreId IN
+        <foreach collection="storeId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="salesPlatformId != null and salesPlatformId.length > 0">
+        AND SO.SalesPlatformId IN
+        <foreach collection="salesPlatformId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="status != null and status.length > 0">
+        AND SO.Status IN
+        <foreach collection="status" item="status" open="(" separator="," close=")">
+          #{status}
+        </foreach>
+      </if>
+      <if test="paymentMethodId != null and paymentMethodId.length > 0">
+        AND SO.PaymentMethodId IN
+        <foreach collection="paymentMethodId" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="remark != null and remark != ''">
+        AND SO.Remark LIKE '%' + #{remark} + '%'
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND SO.CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND SO.CreateAt &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null and updateAtS != ''">
+        AND SO.UpdateAt &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null and updateAtE != ''">
+        AND SO.UpdateAt &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id DESC
+  </select>
+</mapper>

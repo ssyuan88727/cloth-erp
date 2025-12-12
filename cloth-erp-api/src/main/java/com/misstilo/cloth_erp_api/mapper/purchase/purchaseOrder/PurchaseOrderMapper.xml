@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseOrder.PurchaseOrderMapper">
-  <!-- Result Map for Supplier-->
-  <resultMap id="supplierResultMap" type="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
-    <id column="SupplierId" property="id" />
-    <result column="SupplierName" property="name" />
-  </resultMap>
   <!-- Result Map for PurchaseOrder -->
   <resultMap id="purchaseOrderResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseOrder.PurchaseOrderResponse">
     <id column="Id" property="id" />
@@ -18,7 +13,10 @@
     <result column="Remark" property="remark" />
     <result column="CreateAt" property="createAt" />
     <result column="UpdateAt" property="updateAt" />
-    <association property="supplier" resultMap="supplierResultMap" />
+    <association property="supplier" javaType="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
+      <id column="SupplierId" property="id"/>
+      <result column="SupplierName" property="name"/>
+    </association>
   </resultMap>
 
   <!-- Insert -->
@@ -41,10 +39,10 @@
       <if test="signed != null">
         Signed = #{signed},
       </if>
-      <if test="date != null and date != ''">
+      <if test="date != null">
         Date = #{date},
       </if>
-      <if test="remark != null and remark != ''">
+      <if test="remark != null">
         Remark = #{remark},
       </if>
       UpdateAt = SYSDATETIME()
@@ -96,6 +94,6 @@
         AND PO.UpdateAt &lt;= #{updateE}
       </if>
     </where>
-    ORDER BY Id
+    ORDER BY Id DESC
   </select>
 </mapper>

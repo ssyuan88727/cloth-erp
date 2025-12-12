@@ -21,7 +21,7 @@
   <update id="update">
     UPDATE ReturnReason
     <set>
-      <if test="reason != null and reason != ''">
+      <if test="reason != null">
         Reason = #{reason},
       </if>
     </set>

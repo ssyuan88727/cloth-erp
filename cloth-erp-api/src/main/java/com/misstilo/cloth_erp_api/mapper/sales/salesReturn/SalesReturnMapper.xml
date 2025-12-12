@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.sales.salesReturn.SalesReturnMapper">
+  <!-- Result Map for SalesReturn -->
+  <resultMap id="salesReturnResultMap" type="com.misstilo.cloth_erp_api.model.sales.salesReturn.SalesReturnResponse">
+    <id column="Id" property="id" />
+    <result column="Confirmed" property="confirmed" />
+    <result column="Signed" property="signed" />
+    <result column="Code" property="code" />
+    <result column="Date" property="date" />
+    <result column="TotQty" property="totQty" />
+    <result column="totAmt" property="totAmt" />
+    <result column="Remark" property="remark" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+    <association property="salesOrder" javaType="com.misstilo.cloth_erp_api.model.sales.salesOrder.SalesOrderResponse">
+      <id column="SalesOrderId" property="id" />
+      <result column="SalesOrderCode" property="code" />
+    </association>
+    <association property="returnReason" javaType="com.misstilo.cloth_erp_api.model.base.returnReason.ReturnReasonResponse">
+      <id column="ReturnReasonId" property="id" />
+      <result column="Reason" property="reason" />
+    </association>
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO SalesReturn (Code, Date, SalesOrderId, ReturnReasonId, Remark)
+    VALUES (#{code}, #{date}, #{salesOrderId}, #{returnReasonId}, #{remark})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM SalesReturn
+    WHERE id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE SalesReturn
+    <set>
+      <if test="confirmed != null">
+        Confirmed = #{confirmed},
+      </if>
+      <if test="signed != null">
+        Signed = #{signed}
+      </if>
+      <if test="salesOrderId != null">
+        SalesOrderId = #{salesOrderId},
+      </if>
+      <if test="returnReasonId != null">
+        ReturnReasonId = #{returnReasonId},
+      </if>
+      <if test="totQty != null">
+        TotQty = #{totQty},
+      </if>
+      <if test="totAmt != null">
+        TotAmt = #{totAmt},
+      </if>
+      <if test="remark != null">
+        Remark = #{remark},
+      </if>
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="salesReturnResultMap">
+    SELECT SR.*, SO.Code AS SalesOrderCode, RR.Reason AS ReturnReason
+    FROM SalesReturn AS SR
+    INNER JOIN SalesOrder AS SO ON SR.SalesOrderId = SO.Id
+    INNER JOIN ReturnReason AS RR ON SR.ReturnReasonId = RR.Id
+    <where>
+      <if test="confirmed != null">
+        AND Confirmed = #{confirmed}
+      </if>
+      <if test="signed != null">
+        AND Signed = #{signed}
+      </if>
+      <if test="code != null and code != ''">
+        AND Code LIKE '%' + #{code}
+      </if>
+      <if test="dateS != null and dateS != ''">
+        AND Date &gt;= #{dateS}
+      </if>
+      <if test="dateE != null and dateE != ''">
+        AND Date &lt;= #{dateE}
+      </if>
+      <if test="salesOrderId != null">
+        AND SalesOrderId = #{salesOrderId}
+      </if>
+      <if test="returnReasonId != null">
+        AND ReturnReasonId = #{returnReasonId}
+      </if>
+      <if test="remark != null and remark != ''">
+        AND Remark LIKE '%' + #{remark} + '%'
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND CreateAt &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null and updateAtS != ''">
+        AND UpdateAt &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null and updateAtE != ''">
+        AND UpdateAt &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id DESC
+  </select>
+</mapper>

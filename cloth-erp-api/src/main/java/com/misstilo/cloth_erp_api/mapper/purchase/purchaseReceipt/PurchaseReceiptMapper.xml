@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseReceipt.PurchaseReceiptMapper">
-  <!-- Result Map for Supplier-->
-  <resultMap id="productSkuResultMap" type="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
-    <id column="SupplierId" property="id" />
-    <result column="SupplierName" property="name" />
-  </resultMap>
   <!-- Result Map for PurchaseReceipt -->
   <resultMap id="purchaseReceiptResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseReceipt.PurchaseReceiptResponse">
     <id column="Id" property="id" />
@@ -13,12 +8,16 @@
     <result column="Signed" property="signed" />
     <result column="Code" property="code" />
     <result column="Date" property="date" />
+    <result column="OriginalCode" property="originalCode"/>
     <result column="TotQty" property="totQty" />
     <result column="TotAmt" property="totAmt" />
     <result column="Remark" property="remark" />
     <result column="CreateAt" property="createAt" />
     <result column="UpdateAt" property="updateAt" />
-    <association property="supplier" resultMap="supplierResultMap" />
+    <association property="supplier" javaType="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
+      <id column="SupplierId" property="id"/>
+      <result column="SupplierName" property="name"/>
+    </association>
   </resultMap>
 
   <!-- Insert -->
@@ -35,16 +34,16 @@
   <update id="update">
     UPDATE PurchaseReceipt
     <set>
-      <if test="confirmed != null">
+      <if test="!= null">
         Confirmed = #{confirmed},
       </if>
-      <if test="signed != null">
+      <if test="!= null">
         Signed = #{signed},
       </if>
-      <if test="originalCode != null and originalCode != ''">
+      <if test="!= null">
         OriginalCode = #{originalCode},
       </if>
-      <if test="remark != null and remark != ''">
+      <if test="!= null">
         Remark = #{remark},
       </if>
       UpdateAt = SYSDATETIME()

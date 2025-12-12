@@ -28,19 +28,19 @@
   <update id="update">
     UPDATE Supplier
     <set>
-      <if test="name != null and name != ''">
+      <if test="!= null">
         Name = #{name},
       </if>
-      <if test="contactName != null and contactName != ''">
+      <if test="!= null">
         ContactName = #{contactName},
       </if>
-      <if test="contactPhone != null and contactPhone != ''">
+      <if test="!= null">
         ContactPhone = #{contactPhone},
       </if>
-      <if test="address != null and address != ''">
+      <if test="!= null">
         Address = #{address},
       </if>
-      <if test="isActive != null">
+      <if test="!= null">
         IsActive = #{isActive},
       </if>
       UpdateAt = SYSDATETIME()

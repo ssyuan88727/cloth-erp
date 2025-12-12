@@ -21,7 +21,7 @@
   <update id="update">
     UPDATE Tag
     <set>
-      <if test="name != null and name != ''">
+      <if test="name != null">
         Name = #{name},
       </if>
     </set>

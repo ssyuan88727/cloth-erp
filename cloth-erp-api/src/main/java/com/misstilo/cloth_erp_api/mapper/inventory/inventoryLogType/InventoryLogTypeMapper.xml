@@ -20,7 +20,7 @@
   <update id="update">
     UPDATE IventoryLogType
     <set>
-      <if test="name != null and name != ''">
+      <if test="name != null">
         Name = #{name},
       </if>
     </set>

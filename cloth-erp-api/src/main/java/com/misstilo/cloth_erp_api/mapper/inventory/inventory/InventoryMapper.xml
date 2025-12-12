@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.inventory.inventory.InventoryMapper">
-  <!-- Result Map for Store-->
-  <resultMap id="storeResultMap" type="com.misstilo.cloth_erp_api.model.store.store.StoreResponse">
-    <id column="StoreId" property="id" />
-    <result column="StoreName" property="name" />
-  </resultMap>
-  <!-- Result Map for ProductSku-->
-  <resultMap id="productSkuResultMap" type="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
-    <id column="ProductSkuId" property="id" />
-    <result column="ProductSkuCode" property="skuCode" />
-  </resultMap>
   <!-- Result Map for Inventory -->
   <resultMap id="inventoryResultMap" type="com.misstilo.cloth_erp_api.model.inventory.inventory.InventoryResponse">
     <id column="Id" property="id" />
@@ -20,8 +10,14 @@
     <result column="SaleQty" property="saleQty" />
     <result column="SaleReturnQty" property="saleReturnQty" />
     <result column="ActualQty" property="actualQty" />
-    <association property="store" resultMap="storeResultMap" />
-    <association property="productSku" resultMap="productSkuResultMap" />
+    <association property="store" javaType="com.misstilo.cloth_erp_api.model.store.store.StoreResponse">
+      <id column="StoreId" property="id"/>
+      <result column="StoreName" property="name"/>
+    </association>
+    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
+      <id column="ProductSkuId" property="id"/>
+      <result column="ProductSkuCode" property="skuCode"/>
+    </association>
   </resultMap>
 
   <!-- Insert -->

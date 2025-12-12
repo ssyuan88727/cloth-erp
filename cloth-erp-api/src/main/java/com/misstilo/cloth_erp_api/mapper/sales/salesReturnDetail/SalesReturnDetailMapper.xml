@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.sales.salesReturnDetail.SalesReturnDetailMapper">
+  <!-- Result Map for SalesReturnDetail -->
+  <resultMap id="salesReturnDetailResultMap" type="com.misstilo.cloth_erp_api.model.sales.salesReturnDetail.SalesReturnDetailResponse">
+    <id column="Id" property="id" />
+    <result column="SalesReturnId" property="salesReturnId" />
+    <result column="Qty" property="qty" />
+    <result column="RefundPrc" property="refundPrc" />
+    <result column="SubTot" property="subTot" />
+    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
+      <id column="ProductSkuId" property="id"/>
+      <result column="ProductSkuCode" property="skuCode"/>
+    </association>
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO SalesReturnDetail (SalesReturnId, ProductSkuId, Qty, RefundPrc)
+    VALUES (#{salesReturnId}, #{productSkuId}, #{qty}, #{refundPrc})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM SalesReturnDetail
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE SalesReturnDetail
+    <set>
+      <if test="!= null">
+        Qty = #{qty},
+      </if>
+      <if test="!= null">
+        RefundPrc = #{refundPrc},
+      </if>
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="salesReturnDetailResultMap">
+    SELECT SRD.*, PS.SkuCode AS ProductSkuCode
+    FROM SalesReturnDetail AS SRD
+    INNER JOIN ProductSku AS PS ON SRD.ProductSkuId = PS.Id
+    <where>
+      SRD.SalesReturnId = #{salesReturnId}
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

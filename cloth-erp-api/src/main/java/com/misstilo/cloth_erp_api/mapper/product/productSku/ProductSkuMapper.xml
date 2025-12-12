@@ -23,10 +23,10 @@
   <update id="update">
     UPDATE ProductSku
     <set>
-      <if test="costPrc != null">
+      <if test="!= null">
         CostPrc = #{costPrc},
       </if>
-      <if test="isActive != null">
+      <if test="!= null">
         IsActive = #{isActive},
       </if>
     </set>

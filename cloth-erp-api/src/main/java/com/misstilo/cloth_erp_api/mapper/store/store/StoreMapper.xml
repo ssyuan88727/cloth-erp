@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.store.store.StoreMapper">
-  <!-- Result Map for StoreType-->
-  <resultMap id="storeTypeResultMap" type="com.misstilo.cloth_erp_api.model.store.storeType.StoreTypeResponse">
-    <id column="StoreTypeId" property="id" />
-    <result column="StoreTypeName" property="name" />
-  </resultMap>
   <!-- Result Map for Store -->
   <resultMap id="storeResultMap" type="com.misstilo.cloth_erp_api.model.store.store.StoreResponse">
     <id column="Id" property="id" />
@@ -14,7 +9,10 @@
     <result column="IsActive" property="isActive" />
     <result column="CreateAt" property="createAt" />
     <result column="UpdateAt" property="updateAt" />
-    <association property="storeType" resultMap="storeTypeResultMap" />
+    <association property="storeType" javaType="com.misstilo.cloth_erp_api.model.store.storeType.StoreTypeResponse">
+      <id column="StoreTypeId" property="id" />
+      <result column="StoreTypeName" property="name" />
+    </association>
   </resultMap>
 
   <!-- Insert -->
@@ -31,13 +29,13 @@
   <update id="update">
     UPDATE Store
     <set>
-      <if test="name != null and name != ''">
+      <if test="!= null">
         Name = #{name},
       </if>
-      <if test="storeTypeId != null">
+      <if test="!= null">
         StoreTypeId = #{storeTypeId},
       </if>
-      <if test="isActive != null">
+      <if test="!= null">
         IsActive = #{isActive},
       </if>
       UpdateAt = SYSDATETIME()

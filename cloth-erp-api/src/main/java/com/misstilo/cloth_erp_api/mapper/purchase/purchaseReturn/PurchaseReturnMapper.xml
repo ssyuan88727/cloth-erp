@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseReturn.PurchaseReturnMapper">
+  <!-- Result Map for PurchaseReturn -->
+  <resultMap id="purchaseReturnResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseReturn.PurchaseReturnResponse">
+    <id column="Id" property="id" />
+    <result column="Confirmed" property="confirmed" />
+    <result column="Signed" property="signed" />
+    <result column="Code" property="code" />
+    <result column="Date" property="date" />
+    <result column="TotQty" property="totQty" />
+    <result column="TotAmt" property="totAmt" />
+    <result column="Remark" property="remark" />
+    <result column="CreateAt" property="createAt" />
+    <result column="UpdateAt" property="updateAt" />
+    <association property="supplier" javaType="com.misstilo.cloth_erp_api.model.supplier.supplier.SupplierResponse">
+      <id column="SupplierId" property="id" />
+      <result column="SupplierName" property="name" />
+    </association>
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO PurchaseReturn (Code, Date, SupplierId, Remark)
+    VALUES (#{code}, #{date}, #{supplierId}, #{remark})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM PurchaseReturn
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE PurchaseReturn
+    <set>
+      <if test="!= null">
+        Confirmed = #{confirmed},
+      </if>
+      <if test="!= null">
+        Signed = #{signed},
+      </if>
+      <if test="!= null">
+        Remark = #{remark},
+      </if>
+      UpdateAt = SYSDATETIME()
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="purchaseReturnResultMap">
+    SELECT Pr.*, S.Name AS SupplierName
+    FROM PurchaseReturn AS PR
+    INNER JOIN Supplier AS S ON PR.SupplierId = S.Id
+    <where>
+      <if test="confirmed != null">
+        AND PR.Confirmed = #{confirmed}
+      </if>
+      <if test="signed != null">
+        AND PR.Signed = #{signed}
+      </if>
+      <if test="code != null and code != ''">
+        AND PR.Code LIKE #{code} + '%'
+      </if>
+      <if test="dateS != null and dateS != ''">
+        AND PR.Date &gt;= #{dateS}
+      </if>
+      <if test="dateE != null and dateE != ''">
+        AND PR.Date &lt;= #{dateE}
+      </if>
+      <if test="supplierId != null and supplierId.size > 0">
+        AND PR.SupplierId IN
+        <foreach collection="supplier" item="id" open="(" separator="," close=")">
+          #{id}
+        </foreach>
+      </if>
+      <if test="remark != null and remark != ''">
+        AND PR.Remark LIKE '%' + #{remark} + '%'
+      </if>
+      <if test="createAtS != null and createAtS != ''">
+        AND PR.CreateAt &gt;= #{createAtS}
+      </if>
+      <if test="createAtE != null and createAtE != ''">
+        AND PR.CreateAt &lt;= #{createAtE}
+      </if>
+      <if test="updateAtS != null and updateAtS != ''">
+        AND PR.UpdateAt &gt;= #{updateAtS}
+      </if>
+      <if test="updateAtE != null and updateAtE != ''">
+        AND PR.UpdateAt &lt;= #{updateAtE}
+      </if>
+    </where>
+    ORDER BY Id DESC
+  </select>
+</mapper>

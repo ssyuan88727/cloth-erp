@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.misstilo.cloth_erp_api.mapper.sales.salesOrderDetail.SalesOrderDetailMapper">
+  <!-- Result Map for SalesOrderDetail -->
+  <resultMap id="salesOrderDetailResultMap" type="com.misstilo.cloth_erp_api.model.sales.salesOrderDetail.SalesOrderDetailResponse">
+    <id column="Id" property="id" />
+    <result column="SalesOrderId" property="salesOrderId" />
+    <result column="Qty" property="qty" />
+    <result column="SellPrc" property="sellPrc" />
+    <result column="DiscPrc" property="discPrc" />
+    <result column="SubTot" property="subTot" />
+    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
+      <id column="ProductSkuId" property="id"/>
+      <result column="ProductSkuCode" property="skuCode"/>
+    </association>
+  </resultMap>
+
+  <!-- Insert -->
+  <insert id="insert">
+    INSERT INTO SalesOrderDetail (SalesOrderId, ProductSkuId, Qty, SellPrc, DiscPrc)
+    VALUES (#{salesOrderId}, #{productSkuId}, #{qty}, #{sellPrc}, #{discPrc})
+  </insert>
+  <!-- Delete -->
+  <delete id="delete">
+    DELETE FROM SalesOrderDetail
+    WHERE Id = #{id}
+  </delete>
+  <!-- Update -->
+  <update id="update">
+    UPDATE SalesOrderDetail
+    <set>
+      <if test="!= null">
+        Qty = #{qty},
+      </if>
+      <if test="!= null">
+        SellPrc = #{sellPrc},
+      </if>
+      <if test="!= null">
+        DiscPrc = #{discPrc},
+      </if>
+    </set>
+    <where>
+      Id = #{id}
+    </where>
+  </update>
+  <!-- Select -->
+  <select id="select" resultMap="salesOrderDetailResultMap">
+    SELECT SOD.*, PS.SkuCode AS ProductSkuCode
+    FROM SalesOrderDetail AS SOD
+    INNER JOIN ProductSku AS PS ON SOD.ProductSkuId = PS.Id
+    <where>
+      SOD.SalesOrderId = #{salesOrderId}
+    </where>
+    ORDER BY Id
+  </select>
+</mapper>

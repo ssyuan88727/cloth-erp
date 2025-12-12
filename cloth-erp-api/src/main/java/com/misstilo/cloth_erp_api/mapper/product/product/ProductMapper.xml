@@ -32,7 +32,7 @@
   <update id="update">
     UPDATE Product
     <set>
-      <if test="name != null and name != ''">
+      <if test="name != null">
         Name = #{name},
       </if>
       <if test="unitPrc != null">
@@ -41,7 +41,7 @@
       <if test="isActive != null">
         IsActive = #{isActive},
       </if>
-      <if test="remark != null and remark != ''">
+      <if test="remark != null">
         Remark = #{remark},
       </if>
       UpdateAt = SYSDATETIME()

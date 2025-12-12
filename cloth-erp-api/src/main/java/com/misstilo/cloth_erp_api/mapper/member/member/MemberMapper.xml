@@ -32,22 +32,22 @@
   <update id="update">
     UPDATE Member
     <set>
-      <if test="code != null and code != ''">
+      <if test="code != null">
         Code = #{code},
       </if>
-      <if test="name != null and name != ''">
+      <if test="name != null">
         Name = #{name},
       </if>
-      <if test="email != null and email != ''">
+      <if test="email != null">
         Email = #{email},
       </if>
-      <if test="address != null and address != ''">
+      <if test="address != null">
         Address = #{address},
       </if>
-      <if test="joinDate != null and joinDate != ''">
+      <if test="joinDate != null">
         JoinDate = #{joinDate},
       </if>
-      <if test="isActive != null and isActive != ''">
+      <if test="isActive != null">
         IsActive = #{isActive},
       </if>
       UpdateAt = SYSDATETIME()

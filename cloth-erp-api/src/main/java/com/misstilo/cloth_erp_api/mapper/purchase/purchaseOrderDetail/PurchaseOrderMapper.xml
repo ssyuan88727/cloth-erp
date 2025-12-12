@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.misstilo.cloth_erp_api.mapper.purchase.purchaseOrderDetail.PurchaseOrderDetailMapper">
-  <!-- Result Map for ProductSku-->
-  <resultMap id="productSkuResultMap" type="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
-    <id column="ProductSkuId" property="id" />
-    <result column="ProductSkuCode" property="skuCode" />
-  </resultMap>
   <!-- Result Map for PurchaseOrderDetail -->
   <resultMap id="purchaseOrderDetailResultMap" type="com.misstilo.cloth_erp_api.model.purchase.purchaseOrderDetail.PurchaseOrderDetailResponse">
     <id column="Id" property="id" />
@@ -13,15 +8,18 @@
     <result column="PurchaseQty" property="purchaseQty" />
     <result column="ReceiveQty" property="receiveQty" />
     <result column="UndeliveredQty" property="undeliveredQty" />
-    <result column="CostQty" property="costQty" />
+    <result column="CostPrc" property="costPrc" />
     <result column="SubTot" property="subTot" />
-    <association property="productSku" resultMap="productSkuResultMap" />
+    <association property="productSku" javaType="com.misstilo.cloth_erp_api.model.product.productSku.ProductSkuResponse">
+      <id column="ProductSkuId" property="id"/>
+      <result column="ProductSkuCode" property="skuCode"/>
+    </association>
   </resultMap>
 
   <!-- Insert -->
   <insert id="insert">
-    INSERT INTO PurchaseOrderDetail (PurchaseOrderId, ProductSkuId, PurchaseQty, CostQty)
-    VALUES (#{purchaseOrderId}, #{productSkuId}, #{purchaseQty}, #{costQty})
+    INSERT INTO PurchaseOrderDetail (PurchaseOrderId, ProductSkuId, PurchaseQty, CostPrc)
+    VALUES (#{purchaseOrderId}, #{productSkuId}, #{purchaseQty}, #{costPrc})
   </insert>
   <!-- Delete -->
   <delete id="delete">
@@ -32,7 +30,7 @@
   <update id="update">
     UPDATE PurchaseOrderDetail
     <set>
-      <if test="purchaseQty != null and purchaseQty > 0">
+      <if test="purchaseQty != null">
         PurchaseQty = #{purchaseQty},
       </if>
       <if test="receiveQty != null">
@@ -41,9 +39,7 @@
       <if test="undeliveredQty != null">
         UndeliveredQty = #{undeliveredQty},
       </if>
-      <if test="costPrc != null">
-        CostPrc = #{costPrc},
-      </if>
+      CostPrc = #{costPrc},
     </set>
     <where>
       Id = #{id}
@@ -57,6 +53,6 @@
     <where>
       POD.PurchaseOrderId = #{purchaseOrderId}
     </where>
-    ORDER BY Id DESC
+    ORDER BY Id
   </select>
 </mapper>
