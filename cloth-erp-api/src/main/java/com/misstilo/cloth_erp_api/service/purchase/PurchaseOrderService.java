@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.misstilo.cloth_erp_api.mapper.purchase.purchaseOrder.PurchaseOrderMapper;
 import com.misstilo.cloth_erp_api.model.purchase.purchaseOrder.PurchaseOrderCreate;
@@ -19,18 +20,22 @@ public class PurchaseOrderService {
     @Autowired
     private final PurchaseOrderMapper mapper;
 
+    @Transactional
     public Integer insert(PurchaseOrderCreate model) {
         return mapper.insert(model);
     }
 
+    @Transactional
     public Integer delete(Integer id) {
         return mapper.delete(id);
     }
 
+    @Transactional
     public Integer update(PurchaseOrderUpdate model) {
         return mapper.update(model);
     }
 
+    @Transactional
     public List<PurchaseOrderResponse> select(PurchaseOrderQuery model) {
         return mapper.select(model);
     }

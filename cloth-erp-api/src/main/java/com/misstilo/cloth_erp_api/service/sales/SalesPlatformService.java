@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.misstilo.cloth_erp_api.mapper.sales.salesPlatform.SalesPlatformMapper;
 import com.misstilo.cloth_erp_api.model.sales.salesPlatform.SalesPlatformCreate;
@@ -19,18 +20,22 @@ public class SalesPlatformService {
     @Autowired
     private final SalesPlatformMapper mapper;
 
+    @Transactional
     public Integer insert(SalesPlatformCreate model) {
         return mapper.insert(model);
     }
 
+    @Transactional
     public Integer delete(Integer id) {
         return mapper.delete(id);
     }
 
+    @Transactional
     public Integer update(SalesPlatformUpdate model) {
         return mapper.update(model);
     }
 
+    @Transactional
     public List<SalesPlatformResponse> select(SalesPlatformQuery model) {
         return mapper.select(model);
     }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StroeCreate {
+public class StoreCreate {
     @NotBlank(message = "名稱不可為空")
     @Size(max = 20, message = "名稱不可超過20字")
     private String name;

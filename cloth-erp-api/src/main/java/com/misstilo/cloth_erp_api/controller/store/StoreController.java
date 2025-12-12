@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.misstilo.cloth_erp_api.model.response.ResponseModel;
 import com.misstilo.cloth_erp_api.model.store.store.StoreResponse;
 import com.misstilo.cloth_erp_api.model.store.store.StoreUpdate;
-import com.misstilo.cloth_erp_api.model.store.store.StroeCreate;
+import com.misstilo.cloth_erp_api.model.store.store.StoreCreate;
 import com.misstilo.cloth_erp_api.service.store.StoreService;
 import com.misstilo.cloth_erp_api.model.store.store.StoreQuery;
 
@@ -31,7 +31,7 @@ public class StoreController {
     private final StoreService service;
 
     @PostMapping("/insert")
-    public ResponseModel<Integer> insert(@RequestBody @Valid StroeCreate model) {
+    public ResponseModel<Integer> insert(@RequestBody @Valid StoreCreate model) {
         return ResponseModel.success(service.insert(model));
     }
 
